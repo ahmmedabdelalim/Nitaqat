@@ -1,0 +1,166 @@
+body {
+    background: #fff;
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #2b4463;
+}
+.input-label {
+    display: block;
+    font-weight: bold;
+    margin: 10px 0 5px;
+    color: #333; /* adjust for light or dark theme */
+    font-size: 14px;
+}
+.input-field::placeholder {
+    color: #888;
+    font-size: 14px;
+    font-weight: 500;
+}
+.input-field {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+
+.signup-container {
+    max-width: 350px;
+    margin: 40px auto;
+    padding: 32px 24px 16px 24px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(43, 68, 99, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    width: 90px;
+    height: 90px;
+    margin-bottom: 18px;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #2b4463;
+    margin: 0 0 6px 0;
+}
+
+.subtitle {
+    color: #2b4463;
+    font-size: 1rem;
+    margin-bottom: 28px;
+}
+
+.signup-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+    margin-bottom: 0;
+}
+
+.google-btn {
+    background: #4285f4;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.microsoft-btn {
+    background: #222;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.email-btn {
+    background: #ff7a1a;
+    color: #fff;
+    margin: 18px 0 0 0;
+}
+
+.btn:active {
+    box-shadow: 0 2px 8px rgba(43, 68, 99, 0.12);
+}
+
+.divider {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    line-height: 0.1em;
+    margin: 18px 0 0 0;
+}
+
+.divider span {
+    background: #fff;
+    padding: 0 12px;
+    color: #b0b0b0;
+    font-size: 0.95em;
+}
+
+.login-link {
+    margin-top: 18px;
+    font-size: 0.98em;
+    color: #2b4463;
+}
+
+.login-link a {
+    color: #2b4463;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+/* Icon styles */
+.icon {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.google-icon {
+    background: url('data:image/svg+xml;utf8,<svg width="22" height="22" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><g><path fill="%23EA4335" d="M24 9.5c3.54 0 6.7 1.22 9.19 3.23l6.85-6.85C35.91 2.36 30.28 0 24 0 14.82 0 6.73 5.82 2.69 14.09l7.98 6.2C12.13 13.98 17.56 9.5 24 9.5z"/><path fill="%234285F4" d="M46.1 24.5c0-1.64-.15-3.22-.42-4.74H24v9.01h12.42c-.54 2.9-2.18 5.36-4.65 7.01l7.19 5.59C43.98 37.36 46.1 31.36 46.1 24.5z"/><path fill="%23FBBC05" d="M10.67 28.29c-1.13-3.36-1.13-6.93 0-10.29l-7.98-6.2C.99 16.36 0 20.05 0 24c0 3.95.99 7.64 2.69 12.2l7.98-6.2z"/><path fill="%2334A853" d="M24 48c6.28 0 11.91-2.07 15.89-5.64l-7.19-5.59c-2.01 1.35-4.59 2.13-8.7 2.13-6.44 0-11.87-4.48-13.33-10.5l-7.98 6.2C6.73 42.18 14.82 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></g></svg>') no-repeat center/contain;
+}
+
+.microsoft-icon {
+    background: url('data:image/svg+xml;utf8,<svg width="22" height="22" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><g><rect fill="%23F35325" x="1" y="1" width="21" height="21"/><rect fill="%23FFB900" x="26" y="1" width="21" height="21"/><rect fill="%2385C441" x="1" y="26" width="21" height="21"/><rect fill="%2320A1D6" x="26" y="26" width="21" height="21"/></g></svg>') no-repeat center/contain;
+}
+
+.email-icon {
+    background: url('data:image/svg+xml;utf8,<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" fill="white"/><path d="M2 4C0.89543 4 0 4.89543 0 6V18C0 19.1046 0.89543 20 2 20H22C23.1046 20 24 19.1046 24 18V6C24 4.89543 23.1046 4 22 4H2ZM2 6H22V8.382L12 15.118L2 8.382V6ZM2 10.618L12 17.382L22 10.618V18H2V10.618Z" fill="%23fff"/><path d="M2 4C0.89543 4 0 4.89543 0 6V18C0 19.1046 0.89543 20 2 20H22C23.1046 20 24 19.1046 24 18V6C24 4.89543 23.1046 4 22 4H2ZM2 6H22V8.382L12 15.118L2 8.382V6ZM2 10.618L12 17.382L22 10.618V18H2V10.618Z" fill="%23ff7a1a"/></svg>') no-repeat center/contain;
+}
+
+@media (max-width: 480px) {
+    .signup-container {
+        max-width: 98vw;
+        padding: 18px 4vw 10px 4vw;
+    }
+    .logo {
+        width: 70px;
+        height: 70px;
+    }
+    .title {
+        font-size: 1.3rem;
+    }
+}
