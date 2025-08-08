@@ -1,0 +1,14 @@
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\config\SecurityConfig.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\AuthController.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\web\DashboardController.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\web\WebAuthController.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\ApiResponse.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\LoginRequest.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\SignupRequest.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\User.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\NitaqatApplication.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserRepository.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\CustomUserDetailsService.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\JwtUtils.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\EmailService.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\UserService.java
