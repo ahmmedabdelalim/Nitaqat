@@ -1,0 +1,12 @@
+signup.success: "Signup successful. Admin has been notified."
+signup.failure: "Signup failed: {0}"
+pages:
+  professions: "Professions"
+  activity: "Activity"
+  upload: "Upload"
+
+auth:
+  success: "User is authorized for {0}"
+  failure: "User is NOT authorized for {0}"
+  user_not_found: "User not found"
+  unknown_page: "Unknown page: {0}"

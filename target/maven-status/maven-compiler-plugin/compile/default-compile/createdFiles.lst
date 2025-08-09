@@ -6,9 +6,12 @@ com\nitaqat\nitaqat\security\CustomUserDetailsService.class
 com\nitaqat\nitaqat\config\SecurityConfig.class
 com\nitaqat\nitaqat\repository\UserRepository.class
 com\nitaqat\nitaqat\service\UserService.class
+com\nitaqat\nitaqat\dto\AuthorizationRequest.class
 com\nitaqat\nitaqat\dto\LoginRequest.class
+com\nitaqat\nitaqat\i18n\YamlMessageSource.class
 com\nitaqat\nitaqat\service\EmailService.class
 com\nitaqat\nitaqat\dto\ApiResponse.class
 com\nitaqat\nitaqat\controller\web\DashboardController.class
 com\nitaqat\nitaqat\dto\SignupRequest.class
+com\nitaqat\nitaqat\locale\LocalizationConfig.class
 com\nitaqat\nitaqat\controller\web\WebAuthController.class

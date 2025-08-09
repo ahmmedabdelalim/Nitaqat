@@ -12,6 +12,8 @@ public class SignupRequest {
     @NotBlank
     private String password;
 
+    private String lang;
+
     public String getEmail() {
         return email;
     }
@@ -26,5 +28,13 @@ public class SignupRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
     }
 }

@@ -3,9 +3,12 @@ D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\AuthController.j
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\web\DashboardController.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\web\WebAuthController.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\ApiResponse.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\AuthorizationRequest.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\LoginRequest.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\SignupRequest.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\User.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\i18n\YamlMessageSource.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\locale\LocalizationConfig.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\NitaqatApplication.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserRepository.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\CustomUserDetailsService.java

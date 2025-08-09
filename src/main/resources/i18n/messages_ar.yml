@@ -1,0 +1,12 @@
+signup.success: "تم التسجيل بنجاح. تم إخطار المسؤول."
+signup.failure: "فشل التسجيل: {0}"
+pages:
+  professions: "المهن"
+  activity: "الأنشطة"
+  upload: "التحميل"
+
+auth:
+  success: "المستخدم مخوّل لصفحة {0}"
+  failure: "المستخدم غير مخوّل لصفحة {0}"
+  user_not_found: "المستخدم غير موجود"
+  unknown_page: "صفحة غير معروفة: {0}"
