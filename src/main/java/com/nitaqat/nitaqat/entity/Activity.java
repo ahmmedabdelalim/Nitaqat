@@ -11,8 +11,24 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
+    @Column(name = "company_code")
+    private String companyCode;
+
+    @Column(name = "parent_id")
+    private String parentId;
+
     public Long getId() {
         return id;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
     public void setId(Long id) {
@@ -35,19 +51,5 @@ public class Activity {
         this.companyCode = companyCode;
     }
 
-    public Long getParentId() {
-        return parentId;
-    }
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
-
-    private String name;
-
-    @Column(name = "company_code")
-    private String companyCode;
-
-    @Column(name = "parent_id")
-    private Long parentId;
 }

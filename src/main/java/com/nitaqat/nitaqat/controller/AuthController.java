@@ -58,7 +58,7 @@ public class AuthController {
             return ResponseEntity.ok(new ApiResponse(true, msg, 200, null));
         } catch (Exception e) {
             String msg = messageSource.getMessage("signup.failure", new Object[]{e.getMessage()}, locale);
-            return ResponseEntity.status(500).body(new ApiResponse(false, msg, 400, null));
+            return ResponseEntity.status(400).body(new ApiResponse(false, msg, 400, null));
         }
     }
 
@@ -74,11 +74,11 @@ public class AuthController {
                 Optional<User> user = userService.findByEmail(loginRequest.getEmail()) ;
 
                 if (user.isEmpty() || !passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
-                    return ResponseEntity.status(401).body(new ApiResponse(false, "Invalid email or password", 400));
+                    return ResponseEntity.status(400).body(new ApiResponse(false, "Invalid email or password", 400));
                 }
 
                 if (!user.get().isActive()) {
-                    return ResponseEntity.status(403).body(new ApiResponse(false, "User not active", 400, null , "pending"));
+                    return ResponseEntity.status(400).body(new ApiResponse(false, "User not active", 400, null , "pending"));
                 }
 
                 String token = jwtUtils.generateJwtToken(user.get().getEmail());
@@ -117,7 +117,7 @@ public class AuthController {
         );
 
         return ResponseEntity.ok(
-                new ApiResponse(authorized, responseMessage, authorized ? 200 : 403)
+                new ApiResponse(authorized, responseMessage, authorized ? 200 : 400)
         );
     }
 

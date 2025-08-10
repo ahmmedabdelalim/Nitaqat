@@ -10,3 +10,12 @@ auth:
   failure: "User is NOT authorized for {0}"
   user_not_found: "User not found"
   unknown_page: "Unknown page: {0}"
+
+
+file:
+  missing: "File is missing or empty"
+unsupported:
+  type: "Unsupported import type: {0}"
+import:
+  success: "Data imported successfully"
+  failed: "Import failed: {0}"

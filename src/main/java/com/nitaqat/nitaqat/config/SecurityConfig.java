@@ -1,23 +1,18 @@
 package com.nitaqat.nitaqat.config;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
-
-import java.io.IOException;
-import java.io.PrintWriter;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
@@ -25,50 +20,57 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // 👇 Custom entry point for API vs Web
-    private final AuthenticationEntryPoint customAuthEntryPoint = (request, response, authException) -> {
-        String path = request.getRequestURI();
-
-        if (path.contains("/api/")) {
-            // For APIs — return JSON response
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-            PrintWriter writer = response.getWriter();
-            writer.write("{\"status\":401,\"message\":\"Unauthorized access\"}");
-            writer.flush();
-        } else {
-            // For Web — redirect to login page
-            response.sendRedirect("/");
-        }
+    private final AuthenticationEntryPoint apiAuthEntryPoint = (request, response, authException) -> {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().write("{\"status\":401,\"message\":\"Unauthorized access\"}");
     };
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    public SecurityFilterChain apiSecurity(HttpSecurity http) throws Exception {
+        System.out.println("API Security Filter Chain applied for /api/**"); // Debug log
         http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .securityMatcher("/api/**")
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/api/auth/**" , "/api/import"  ).permitAll()
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/api/import",
+                                "/api/import/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(apiAuthEntryPoint))
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable());
+
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain webSecurity(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/")                         // custom login page (GET /)
-                        .loginProcessingUrl("/login")           // Spring Security processes POST /login
-                        .defaultSuccessUrl("/dashboard", true)  // redirect after successful login
-                        .failureUrl("/?error=true")             // redirect back on failure
+                        .loginPage("/")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/dashboard", true)
+                        .failureUrl("/?error=true")
                         .permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/") // custom login page
+                        .loginPage("/")
                         .defaultSuccessUrl("/dashboard", true)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
-                )
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(customAuthEntryPoint)
                 );
 
         return http.build();
