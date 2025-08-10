@@ -6,15 +6,25 @@ public class ApiResponse {
     private String message;
     private int code;
     private String token;
+    private String accountStatus;
 
 
     // ✅ Proper full constructor
-    public ApiResponse(boolean success, String message, int code, String token) {
+    public ApiResponse(boolean success, String message, int code,String token) {
         this.success = success;
         this.message = message;
         this.code = code;
         this.token = token;
     }
+
+    public ApiResponse(boolean success, String message, int code, String token, String accountStatus) {
+        this.success = success;
+        this.message = message;
+        this.code = code;
+        this.token = token;
+        this.accountStatus = accountStatus;
+    }
+
 
     // Optional 3-arg constructor
     public ApiResponse(boolean success, String message, int code) {
@@ -58,5 +68,13 @@ public class ApiResponse {
     }
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(String accountStatus) {
+        this.accountStatus = accountStatus;
     }
 }

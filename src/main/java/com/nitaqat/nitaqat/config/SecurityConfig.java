@@ -29,7 +29,7 @@ public class SecurityConfig {
     private final AuthenticationEntryPoint customAuthEntryPoint = (request, response, authException) -> {
         String path = request.getRequestURI();
 
-        if (path.startsWith("/api/")) {
+        if (path.contains("/api/")) {
             // For APIs — return JSON response
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -46,10 +46,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/api/auth/**"  ).permitAll()
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/api/auth/**" , "/api/import"  ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
