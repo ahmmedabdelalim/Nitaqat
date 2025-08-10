@@ -16,6 +16,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    private String name;
 
     @Email
     @NotBlank
@@ -108,5 +110,13 @@ public class User {
 
     public void setUpload_active(boolean upload_active) {
         this.upload_active = upload_active;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

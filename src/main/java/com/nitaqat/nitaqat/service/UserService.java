@@ -41,8 +41,8 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setActive(false);
         user.setRole("user");
+        user.setName(request.getName());
         user.setCreatedAt(LocalDateTime.now());
-
 
         userRepository.save(user);
         emailService.notifyAdminOfNewUser(user.getEmail());
