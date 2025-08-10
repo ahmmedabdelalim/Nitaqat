@@ -1,3 +1,4 @@
+com\nitaqat\nitaqat\service\ExcelImportService$1.class
 com\nitaqat\nitaqat\NitaqatApplication.class
 com\nitaqat\nitaqat\entity\User.class
 com\nitaqat\nitaqat\security\JwtUtils.class
@@ -6,6 +7,8 @@ com\nitaqat\nitaqat\security\CustomUserDetailsService.class
 com\nitaqat\nitaqat\config\SecurityConfig.class
 com\nitaqat\nitaqat\repository\UserRepository.class
 com\nitaqat\nitaqat\service\UserService.class
+com\nitaqat\nitaqat\service\ExcelImportService.class
+com\nitaqat\nitaqat\entity\Activity.class
 com\nitaqat\nitaqat\dto\AuthorizationRequest.class
 com\nitaqat\nitaqat\dto\LoginRequest.class
 com\nitaqat\nitaqat\i18n\YamlMessageSource.class
@@ -14,4 +17,6 @@ com\nitaqat\nitaqat\dto\ApiResponse.class
 com\nitaqat\nitaqat\controller\web\DashboardController.class
 com\nitaqat\nitaqat\dto\SignupRequest.class
 com\nitaqat\nitaqat\locale\LocalizationConfig.class
+com\nitaqat\nitaqat\controller\ImportController.class
+com\nitaqat\nitaqat\repository\ActivityRepository.class
 com\nitaqat\nitaqat\controller\web\WebAuthController.class
