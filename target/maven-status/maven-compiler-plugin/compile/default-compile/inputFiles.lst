@@ -14,8 +14,8 @@ D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\locale\LocalizationConfig.j
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\NitaqatApplication.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\ActivityRepository.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserRepository.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\CustomUserDetailsService.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\JwtUtils.java
-D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\CustomUserDetailsService.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\EmailService.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\ExcelImportService.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\UserService.java
