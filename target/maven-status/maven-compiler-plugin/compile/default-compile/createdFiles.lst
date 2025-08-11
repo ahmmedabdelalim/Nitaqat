@@ -1,9 +1,9 @@
 com\nitaqat\nitaqat\service\ExcelImportService$1.class
+com\nitaqat\nitaqat\service\CustomUserDetailsService.class
 com\nitaqat\nitaqat\NitaqatApplication.class
 com\nitaqat\nitaqat\entity\User.class
 com\nitaqat\nitaqat\security\JwtUtils.class
 com\nitaqat\nitaqat\controller\AuthController.class
-com\nitaqat\nitaqat\security\CustomUserDetailsService.class
 com\nitaqat\nitaqat\config\SecurityConfig.class
 com\nitaqat\nitaqat\repository\UserRepository.class
 com\nitaqat\nitaqat\service\UserService.class
