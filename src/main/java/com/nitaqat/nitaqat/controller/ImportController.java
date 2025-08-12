@@ -37,11 +37,22 @@ public class ImportController {
                 return ResponseEntity.badRequest()
                         .body(new ApiResponse(false, messageSource.getMessage("file.missing", null, locale), 400));
             }
-            if (!"activities".equalsIgnoreCase(type)) {
+
+            if("activities".equalsIgnoreCase(type))
+            {
+                excelImportService.importActivitiesFromExcel(file);
+            }
+            else if("professions".equalsIgnoreCase(type))
+            {
+                excelImportService.importProfessionsFromExcel(file);
+            }
+            else
+            {
                 return ResponseEntity.badRequest()
                         .body(new ApiResponse(false, messageSource.getMessage("unsupported.type", new Object[]{type}, locale), 400));
+
             }
-            excelImportService.importActivitiesFromExcel(file);
+
             return ResponseEntity.ok(new ApiResponse(true, messageSource.getMessage("import.success", null, locale), 200));
         } catch (Exception e) {
             e.printStackTrace();

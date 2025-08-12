@@ -1,4 +1,5 @@
 com\nitaqat\nitaqat\service\ExcelImportService$1.class
+com\nitaqat\nitaqat\repository\ProfessionsRepository.class
 com\nitaqat\nitaqat\NitaqatApplication.class
 com\nitaqat\nitaqat\entity\User.class
 com\nitaqat\nitaqat\security\JwtUtils.class
@@ -8,6 +9,7 @@ com\nitaqat\nitaqat\config\SecurityConfig.class
 com\nitaqat\nitaqat\repository\UserRepository.class
 com\nitaqat\nitaqat\service\UserService.class
 com\nitaqat\nitaqat\service\ExcelImportService.class
+com\nitaqat\nitaqat\entity\Profession.class
 com\nitaqat\nitaqat\entity\Activity.class
 com\nitaqat\nitaqat\dto\AuthorizationRequest.class
 com\nitaqat\nitaqat\dto\LoginRequest.class
