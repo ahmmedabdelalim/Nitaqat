@@ -46,6 +46,10 @@ public class ImportController {
             {
                 excelImportService.importProfessionsFromExcel(file);
             }
+            else if("saudization_percentage".equalsIgnoreCase(type))
+            {
+                excelImportService.importSaudizationPercentage(file);
+            }
             else
             {
                 return ResponseEntity.badRequest()

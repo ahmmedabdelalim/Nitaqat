@@ -38,10 +38,10 @@ public class Profession {
     private String job;
 
     @Column(name = "residence_expire_date")
-    private LocalDate residenceExpireDate;
+    private String residenceExpireDate;
 
     @Column(name = "date_of_entry_inot_theKingdom")
-    private LocalDate dateOfEntryIntoTheKingdom;
+    private String dateOfEntryIntoTheKingdom;
 
     @Column(name = "work_type")
     private String workType;
@@ -118,19 +118,20 @@ public class Profession {
         this.job = job;
     }
 
-    public LocalDate getResidenceExpireDate() {
+
+    public String getResidenceExpireDate() {
         return residenceExpireDate;
     }
 
-    public void setResidenceExpireDate(LocalDate residenceExpireDate) {
+    public void setResidenceExpireDate(String residenceExpireDate) {
         this.residenceExpireDate = residenceExpireDate;
     }
 
-    public LocalDate getDateOfEntryIntoTheKingdom() {
+    public String getDateOfEntryIntoTheKingdom() {
         return dateOfEntryIntoTheKingdom;
     }
 
-    public void setDateOfEntryIntoTheKingdom(LocalDate dateOfEntryIntoTheKingdom) {
+    public void setDateOfEntryIntoTheKingdom(String dateOfEntryIntoTheKingdom) {
         this.dateOfEntryIntoTheKingdom = dateOfEntryIntoTheKingdom;
     }
 

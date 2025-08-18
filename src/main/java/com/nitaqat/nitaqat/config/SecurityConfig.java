@@ -38,6 +38,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/api/import",
+                                "/api/profession-report",
+                                "/api/profession-report/**",
                                 "/api/import/**"
                         ).permitAll()
                         .anyRequest().authenticated()

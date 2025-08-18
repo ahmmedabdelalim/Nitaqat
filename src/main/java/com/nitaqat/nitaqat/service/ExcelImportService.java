@@ -2,8 +2,10 @@ package com.nitaqat.nitaqat.service;
 
 import com.nitaqat.nitaqat.entity.Activity;
 import com.nitaqat.nitaqat.entity.Profession;
+import com.nitaqat.nitaqat.entity.SaudizationPercentage;
 import com.nitaqat.nitaqat.repository.ActivityRepository;
 import com.nitaqat.nitaqat.repository.ProfessionsRepository;
+import com.nitaqat.nitaqat.repository.SaudizationPercentageRespository;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,10 +26,12 @@ public class ExcelImportService {
 
     private final ActivityRepository activityRepository;
     private final ProfessionsRepository professionsRepository;
+    private final SaudizationPercentageRespository saudizationPercentageRespository;
 
-    public ExcelImportService(ActivityRepository activityRepository, ProfessionsRepository professionsRepository) {
+    public ExcelImportService(ActivityRepository activityRepository, ProfessionsRepository professionsRepository, SaudizationPercentageRespository saudizationPercentageRespository) {
         this.activityRepository = activityRepository;
         this.professionsRepository = professionsRepository;
+        this.saudizationPercentageRespository = saudizationPercentageRespository;
     }
 
     public void importActivitiesFromExcel(MultipartFile file) throws IOException {
@@ -118,13 +122,41 @@ public class ExcelImportService {
                 String job = getCellValue(row.getCell(7));
                 profession.setJob(job.isEmpty() ? null : job);
 
+//                String residenceExpireDateStr = getCellValue(row.getCell(8));
+//                LocalDate residenceExpireDate = parseHijriDateManual(residenceExpireDateStr);
+//                profession.setResidenceExpireDate(residenceExpireDate);
+//
+//                String dateOfEntryStr = getCellValue(row.getCell(9));
+//                LocalDate dateOfEntry = parseHijriDateManual(dateOfEntryStr);
+//                profession.setDateOfEntryIntoTheKingdom(dateOfEntry);
+
+//                String residenceExpireDateStr = getCellValue(row.getCell(8));
+//                if (residenceExpireDateStr.isEmpty()) {
+//                    profession.setResidenceExpireDate(null);
+//                } else {
+//                    profession.setResidenceExpireDate(LocalDate.parse(residenceExpireDateStr));
+//                }
+//
+//                String dateOfEntryStr = getCellValue(row.getCell(9));
+//                if (dateOfEntryStr.isEmpty()) {
+//                    profession.setDateOfEntryIntoTheKingdom(null);
+//                } else {
+//                    profession.setDateOfEntryIntoTheKingdom(LocalDate.parse(dateOfEntryStr));
+//                }
                 String residenceExpireDateStr = getCellValue(row.getCell(8));
-                LocalDate residenceExpireDate = parseHijriDateManual(residenceExpireDateStr);
-                profession.setResidenceExpireDate(residenceExpireDate);
+                if (residenceExpireDateStr.isEmpty()) {
+                    profession.setResidenceExpireDate(null);
+                } else {
+                    profession.setResidenceExpireDate(residenceExpireDateStr); // store as String
+                }
 
                 String dateOfEntryStr = getCellValue(row.getCell(9));
-                LocalDate dateOfEntry = parseHijriDateManual(dateOfEntryStr);
-                profession.setDateOfEntryIntoTheKingdom(dateOfEntry);
+                if (dateOfEntryStr.isEmpty()) {
+                    profession.setDateOfEntryIntoTheKingdom(null);
+                } else {
+                    profession.setDateOfEntryIntoTheKingdom(dateOfEntryStr); // store as String
+                }
+
 
 
                 String workType = getCellValue(row.getCell(10));
@@ -135,6 +167,64 @@ public class ExcelImportService {
 
             if (!professions.isEmpty()) {
                 professionsRepository.saveAll(professions);
+            }
+
+        }
+    }
+
+    public void importSaudizationPercentage (MultipartFile file) throws IOException
+    {
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("Uploaded file is empty or missing");
+        }
+        try (InputStream is = file.getInputStream())
+        {
+            Workbook workbook = WorkbookFactory.create(is);
+            Sheet sheet = workbook.getSheet("Saudized Job Title");
+            if (sheet == null) {
+                sheet = workbook.getSheetAt(0);
+            }
+            if (sheet == null) {
+                throw new RuntimeException("No valid sheet found in the Excel file");
+            }
+
+            List <SaudizationPercentage> saudizationPercentages = new  ArrayList<>();
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null) continue;
+
+                SaudizationPercentage saudizationPercentage = new SaudizationPercentage();
+
+//                String primaryColumn = getCellValue(row.getCell(0));
+//                saudizationPercentage.setPrimaryColumn(primaryColumn.isEmpty() ? null : Long.valueOf(primaryColumn));
+
+                saudizationPercentage.setPrimaryColumn(null);
+
+                String job = getCellValue(row.getCell(1));
+                saudizationPercentage.setJob(job.isEmpty()? null : job);
+
+                String job_ar = getCellValue(row.getCell(2));
+                saudizationPercentage.setJobAr(job_ar.isEmpty()? null : job_ar);
+
+                String job_en = getCellValue(row.getCell(3));
+                saudizationPercentage.setJobEn(job_en.isEmpty()? null : job_en);
+
+                String Saudization_Catageory = getCellValue(row.getCell(4));
+                saudizationPercentage.setSaudizationCatageory(Saudization_Catageory.isEmpty()? null : Saudization_Catageory);
+
+                String Saudization_Percentage = getCellValue(row.getCell(5));
+                saudizationPercentage.setSaudizationPercentage(Saudization_Percentage.isEmpty()? null : Long.valueOf(Saudization_Percentage));
+
+                String Saudization_CatageoryAr = getCellValue(row.getCell(6));
+                saudizationPercentage.setSaudizationCatageoryAr(Saudization_CatageoryAr.isEmpty()? null : Saudization_CatageoryAr);
+
+                String EmpThreshold = getCellValue(row.getCell(7));
+                saudizationPercentage.setEmpThreshold(EmpThreshold.isEmpty()? null : Long.valueOf(EmpThreshold));
+
+                saudizationPercentages.add(saudizationPercentage);
+            }
+            if (!saudizationPercentages.isEmpty()) {
+                saudizationPercentageRespository.saveAll(saudizationPercentages);
             }
 
         }
