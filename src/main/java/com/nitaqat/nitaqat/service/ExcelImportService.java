@@ -66,6 +66,10 @@ public class ExcelImportService {
                 String parentIdStr = getCellValue(row.getCell(2));
                 activity.setParentId(parentIdStr.isEmpty() ? null : String.valueOf(parentIdStr));
 
+                String percentageStr = getCellValue(row.getCell(3));
+                activity.setPercentage(
+                        (percentageStr == null || percentageStr.trim().isEmpty()) ? null : Long.parseLong(percentageStr.trim())
+                );
                 activities.add(activity);
             }
 

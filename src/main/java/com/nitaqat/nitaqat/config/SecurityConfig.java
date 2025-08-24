@@ -40,6 +40,7 @@ public class SecurityConfig {
                                 "/api/import",
                                 "/api/profession-report",
                                 "/api/profession-report/**",
+                                "api/**",
                                 "/api/import/**"
                         ).permitAll()
                         .anyRequest().authenticated()

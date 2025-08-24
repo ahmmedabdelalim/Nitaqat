@@ -15,12 +15,16 @@ public class ProfessionReportRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<ProfessionReportDTO> getProfessionReport() {
+    public List<ProfessionReportDTO> getProfessionReport(Long activityId) {
+
+        String condition = (activityId != null) ? "WHERE a.id = " + activityId : "";
+
         String sql = """
             SELECT 
                 p.company_code,
-                a.company_name,
+                a.name AS company_name,
                 sp.saudization_catageory,
+                sp.saudization_catageory_ar,
                 COUNT(p.id) AS total_employees,
                 SUM(CASE WHEN p.nationality = 'سعودي' THEN 1 ELSE 0 END) AS total_saudi_employees,
                 sp.saudization_percentage AS required_saudization_percentage,
@@ -33,21 +37,26 @@ public class ProfessionReportRepository {
                 ON p.job = sp.job
             JOIN activities a 
                 ON p.company_code = a.company_code
+            %s
             GROUP BY 
                 p.company_code,
-                a.company_name,
+                a.name,
                 sp.saudization_catageory,
-                sp.saudization_percentage
+                sp.saudization_percentage,
+                sp.saudization_catageory_ar
             ORDER BY 
                 p.company_code,
                 sp.saudization_catageory
-        """;
+                
+        """.formatted(condition);
 
-        return jdbcTemplate.query(sql, (rs, rowNum) ->
+        return jdbcTemplate.query(sql,
+                (rs, rowNum) ->
                 new ProfessionReportDTO(
                         rs.getString("company_code"),
                         rs.getString("company_name"),
                         rs.getString("saudization_catageory"),
+                        rs.getString("saudization_catageory_ar"),
                         rs.getInt("total_employees"),
                         rs.getInt("total_saudi_employees"),
                         rs.getDouble("required_saudization_percentage"),

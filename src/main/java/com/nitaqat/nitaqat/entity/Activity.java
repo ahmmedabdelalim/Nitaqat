@@ -2,6 +2,8 @@ package com.nitaqat.nitaqat.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "activities")
 
@@ -16,8 +18,20 @@ public class Activity {
     @Column(name = "company_code")
     private String companyCode;
 
+
     @Column(name = "parent_id")
     private String parentId;
+
+    @Column(name = "percentage")
+    private Long percentage;
+
+    public Long getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(Long percentage) {
+        this.percentage = percentage;
+    }
 
     public Long getId() {
         return id;

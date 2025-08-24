@@ -4,6 +4,7 @@ public record ProfessionReportDTO(
         String companyCode,
         String companyName,
         String saudizationCatageory,
+        String saudizationCatageoryAr,
         int totalEmployees,
         int totalSaudiEmployees,
         Double requiredSaudizationPercentage,
