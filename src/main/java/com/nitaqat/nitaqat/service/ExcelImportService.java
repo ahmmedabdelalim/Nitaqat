@@ -60,13 +60,19 @@ public class ExcelImportService {
                 if (row == null) continue;
 
                 Activity activity = new Activity();
-                activity.setName(getCellValue(row.getCell(0)));
-                activity.setCompanyCode(getCellValue(row.getCell(1)));
 
-                String parentIdStr = getCellValue(row.getCell(2));
-                activity.setParentId(parentIdStr.isEmpty() ? null : String.valueOf(parentIdStr));
+                String PrimaryColumn = getCellValue(row.getCell(0));
+                activity.setPrimaryColumn((PrimaryColumn == null || PrimaryColumn.trim().isEmpty()) ? null : Integer.valueOf(PrimaryColumn));
 
-                String percentageStr = getCellValue(row.getCell(3));
+                activity.setName(getCellValue(row.getCell(1)));
+                activity.setCompanyCode(getCellValue(row.getCell(2)));
+
+                String parentIdStr = getCellValue(row.getCell(3));
+                activity.setParentId((parentIdStr == null || parentIdStr.trim().isEmpty()) ? null : Integer.valueOf(parentIdStr));
+
+
+
+                String percentageStr = getCellValue(row.getCell(4));
                 activity.setPercentage(
                         (percentageStr == null || percentageStr.trim().isEmpty()) ? null : Long.parseLong(percentageStr.trim())
                 );

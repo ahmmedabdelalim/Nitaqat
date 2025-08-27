@@ -2,6 +2,7 @@ package com.nitaqat.nitaqat.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,6 +14,9 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="primary_cloumn")
+    private Integer primaryColumn;
+
     private String name;
 
     @Column(name = "company_code")
@@ -20,33 +24,26 @@ public class Activity {
 
 
     @Column(name = "parent_id")
-    private String parentId;
+    private Integer parentId;
 
     @Column(name = "percentage")
     private Long percentage;
 
-    public Long getPercentage() {
-        return percentage;
-    }
-
-    public void setPercentage(Long percentage) {
-        this.percentage = percentage;
-    }
 
     public Long getId() {
         return id;
     }
 
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getPrimaryColumn() {
+        return primaryColumn;
+    }
+
+    public void setPrimaryColumn(Integer primaryColumn) {
+        this.primaryColumn = primaryColumn;
     }
 
     public String getName() {
@@ -65,5 +62,19 @@ public class Activity {
         this.companyCode = companyCode;
     }
 
+    public Integer getParentId() {
+        return parentId;
+    }
 
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
+    public Long getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(Long percentage) {
+        this.percentage = percentage;
+    }
 }

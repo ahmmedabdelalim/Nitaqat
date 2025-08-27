@@ -28,7 +28,7 @@ public class ActivitiesReportController {
         List<ActivitiesReportDTO> report = activitiesReportRepository.getActivitiesReport();
 
         ReportApiResponse<List<ActivitiesReportDTO>> response =
-                new ReportApiResponse<>(true, "Profession report fetched successfully", HttpStatus.OK.value(), report);
+                new ReportApiResponse<>(true, "Activity report fetched successfully", HttpStatus.OK.value(), report);
 
         return ResponseEntity.ok(response);
     }
