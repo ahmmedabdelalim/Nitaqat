@@ -116,9 +116,21 @@ public class AuthController {
                 locale
         );
 
-        return ResponseEntity.ok(
-                new ApiResponse(authorized, responseMessage, authorized ? 200 : 400)
-        );
+        if(authorized)
+        {
+            return ResponseEntity.ok(
+                    new ApiResponse(true, responseMessage, 200)
+            );
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, responseMessage, 400));
+        }
+
+//        return ResponseEntity.ok(
+//                new ApiResponse(authorized, responseMessage, authorized ? 200 : 400)
+//        );
     }
 
 

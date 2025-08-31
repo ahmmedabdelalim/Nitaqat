@@ -1,20 +1,20 @@
 signup.success: "تم التسجيل بنجاح. تم إخطار المسؤول."
-signup.failure: "فشل التسجيل: {0}"
+signup.failure: "فشل التسجيل"
 pages:
   professions: "المهن"
   activity: "الأنشطة"
   upload: "التحميل"
 
 auth:
-  success: "المستخدم مخوّل لصفحة {0}"
-  failure: "المستخدم غير مخوّل لصفحة {0}"
+  success: "المستخدم مخوّل لصفحة "
+  failure: "المستخدم غير مخوّل لصفحة"
   user_not_found: "المستخدم غير موجود"
-  unknown_page: "صفحة غير معروفة: {0}"
+  unknown_page: "صفحة غير معروفة"
 
 file:
   missing: "الملف مفقود أو فارغ"
 unsupported:
-  type: "نوع الاستيراد غير مدعوم: {0}"
+  type: "نوع الاستيراد غير مدعوم"
 import:
   success: "تم استيراد البيانات بنجاح"
-  failed: "فشل الاستيراد: {0}"
+  failed: "هذا الملف له تنسيق خاطئ تأكد من تحديد الملف الصحيح"

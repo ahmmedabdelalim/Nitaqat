@@ -1,21 +1,21 @@
 signup.success: "Signup successful. Admin has been notified."
-signup.failure: "Signup failed: {0}"
+signup.failure: "Signup failed"
 pages:
   professions: "Professions"
   activity: "Activity"
   upload: "Upload"
 
 auth:
-  success: "User is authorized for {0}"
-  failure: "User is NOT authorized for {0}"
+  success: "User is authorized for"
+  failure: "User is NOT authorized for"
   user_not_found: "User not found"
-  unknown_page: "Unknown page: {0}"
+  unknown_page: "Unknown page:"
 
 
 file:
   missing: "File is missing or empty"
 unsupported:
-  type: "Unsupported import type: {0}"
+  type: "Unsupported import type"
 import:
   success: "Data imported successfully"
-  failed: "Import failed: {0}"
+  failed: "This file has wrong formate be sure for select right file"

@@ -60,8 +60,8 @@ public class ImportController {
             return ResponseEntity.ok(new ApiResponse(true, messageSource.getMessage("import.success", null, locale), 200));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500)
-                    .body(new ApiResponse(false, messageSource.getMessage("import.failed", new Object[]{e.getMessage()}, locale), 500));
+            return ResponseEntity.status(400)
+                    .body(new ApiResponse(false, messageSource.getMessage("import.failed", null, locale), 400));
         }
     }
 }
