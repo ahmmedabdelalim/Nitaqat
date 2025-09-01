@@ -6,6 +6,7 @@ import com.nitaqat.nitaqat.dto.SignupRequest;
 import com.nitaqat.nitaqat.entity.User;
 import com.nitaqat.nitaqat.security.JwtUtils;
 import com.nitaqat.nitaqat.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -81,7 +82,7 @@ public class AuthController {
                     return ResponseEntity.status(400).body(new ApiResponse(false, "User not active", 400, null , "pending"));
                 }
 
-                String token = jwtUtils.generateJwtToken(user.get().getEmail());
+                String token = jwtUtils.generateJwtToken(user.get().getEmail() , user.get().getId());
 
 
                 return ResponseEntity.ok(new ApiResponse(true, "Login successful", 200, token , "active"));
@@ -91,7 +92,8 @@ public class AuthController {
     }
 
     @PostMapping("/api/auth/authorize")
-    public ResponseEntity<ApiResponse> checkAuthorization(@RequestBody AuthorizationRequest request) {
+    public ResponseEntity<ApiResponse> checkAuthorization(@RequestBody AuthorizationRequest request
+    , HttpServletRequest httpServletRequest) {
         Locale locale = new Locale(request.getLang());
 
         // Localize page name from messages_xx.yml
@@ -101,9 +103,18 @@ public class AuthController {
                 locale
         );
 
+        String header = httpServletRequest.getHeader("Authorization");
+        if(header == null || !header.startsWith("Bearer "))
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse(false,"auth.missing_token" , 401));
+        }
+        String token = header.substring(7);
+        Long userId  = jwtUtils.extractUserId(token);
+
         boolean authorized;
         try {
-            authorized = userService.isUserAuthorized(request);
+            authorized = userService.isUserAuthorized(userId, request.getPageName());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest()
                     .body(new ApiResponse(false, e.getMessage(), 400));

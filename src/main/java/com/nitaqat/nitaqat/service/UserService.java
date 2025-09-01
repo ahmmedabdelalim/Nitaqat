@@ -53,11 +53,11 @@ public class UserService {
     }
 
 
-    public boolean isUserAuthorized(AuthorizationRequest request) {
-        User user = userRepository.findById(request.getUserId())
+    public boolean isUserAuthorized(Long userId, String pageName) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("auth.user_not_found"));
 
-        switch (request.getPageName().toLowerCase()) {
+        switch (pageName.toLowerCase()) {
             case "professions":
                 return user.isProfessions_active();
             case "activity":
@@ -68,4 +68,5 @@ public class UserService {
                 throw new IllegalArgumentException("auth.unknown_page");
         }
     }
+
 }
