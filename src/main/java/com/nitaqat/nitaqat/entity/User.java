@@ -33,6 +33,11 @@ public class User {
     private boolean activity_active = false ;
     private boolean upload_active = false ;
 
+    @Column(name = "test")
+    @NotBlank
+
+    private String test ;
+
     @Nullable
     public String getRole() {
         return role;

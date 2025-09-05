@@ -1,6 +1,7 @@
 package com.nitaqat.nitaqat.controller;
 
 
+import com.nitaqat.nitaqat.dto.ActivityDto;
 import com.nitaqat.nitaqat.dto.ActivityHierarchyDTO;
 import com.nitaqat.nitaqat.dto.ReportApiResponse;
 import com.nitaqat.nitaqat.entity.Activity;
@@ -26,10 +27,10 @@ public class ActivityController {
     }
 
     @GetMapping("api/activities")
-    public ResponseEntity<ReportApiResponse<List<Activity>>> getAllActivities() {
-        List<Activity> activities = activityRepository.findAll();
+    public ResponseEntity<ReportApiResponse<List<ActivityDto>>> getAllActivities() {
+        List<ActivityDto> activities = activityRepository.findAllIdAndName();
 
-        ReportApiResponse<List<Activity>> response =
+        ReportApiResponse<List<ActivityDto>> response =
                 new ReportApiResponse<>(
                         true,
                         "Activities fetched successfully",
@@ -39,6 +40,7 @@ public class ActivityController {
 
         return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("api/activites/hierarchy")
     public ResponseEntity<ReportApiResponse<List<ActivityHierarchyDTO>>> getHierarchy() {

@@ -26,10 +26,16 @@ public class ProfessionReportRepository {
                 sp.saudization_catageory,
                 sp.saudization_catageory_ar,
                 COUNT(p.id) AS total_employees,
-                SUM(CASE WHEN p.nationality = 'سعودي' THEN 1 ELSE 0 END) AS total_saudi_employees,
+                
+                SUM(CASE WHEN p.nationality = 'سعودي' THEN 1
+                 WHEN p.nationality = 'سعودي معاق' THEN 4
+                 ELSE 0 END) AS total_saudi_employees,
+                 
                 sp.saudization_percentage AS required_saudization_percentage,
                 ROUND(
-                    (SUM(CASE WHEN p.nationality = 'سعودي' THEN 1 ELSE 0 END) * 100.0) / NULLIF(COUNT(p.id), 0),
+                    (SUM(CASE WHEN p.nationality = 'سعودي' THEN 1
+                     WHEN p.nationality = 'سعودي معاق' THEN 4
+                      ELSE 0 END) * 100.0) / NULLIF(COUNT(p.id), 0),
                     2
                 ) AS actual_saudization_percentage
             FROM professions p

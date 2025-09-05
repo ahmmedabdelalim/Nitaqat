@@ -8,6 +8,7 @@ import com.nitaqat.nitaqat.repository.ActivitiesReportRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.function.EntityResponse;
 
@@ -23,9 +24,11 @@ public class ActivitiesReportController {
     }
 
     @GetMapping("/api/activity-report")
-    public ResponseEntity<ReportApiResponse<List<ActivitiesReportDTO>>> getActivitiesReport()
+    public ResponseEntity<ReportApiResponse<List<ActivitiesReportDTO>>> getActivitiesReport(
+            @RequestParam(required = false) Long activityId
+    )
     {
-        List<ActivitiesReportDTO> report = activitiesReportRepository.getActivitiesReport();
+        List<ActivitiesReportDTO> report = activitiesReportRepository.getActivitiesReport(activityId);
 
         ReportApiResponse<List<ActivitiesReportDTO>> response =
                 new ReportApiResponse<>(true, "Activity report fetched successfully", HttpStatus.OK.value(), report);

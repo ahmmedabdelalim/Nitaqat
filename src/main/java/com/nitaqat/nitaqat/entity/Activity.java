@@ -29,6 +29,20 @@ public class Activity {
     @Column(name = "percentage")
     private Long percentage;
 
+    @Column(name = "low_green")
+    private Double lowGreen;
+
+    @Column(name = "middel_green")
+    private Double middelGreen;
+
+    @Column(name = "high_green")
+    private Double highGreen;
+
+    @Column(name = "platinum")
+    private Double platinum;
+
+
+
 
     public Long getId() {
         return id;
@@ -76,5 +90,37 @@ public class Activity {
 
     public void setPercentage(Long percentage) {
         this.percentage = percentage;
+    }
+
+    public Double getLowGreen() {
+        return lowGreen;
+    }
+
+    public void setLowGreen(Double lowGreen) {
+        this.lowGreen = lowGreen;
+    }
+
+    public Double getMiddelGreen() {
+        return middelGreen;
+    }
+
+    public void setMiddelGreen(Double middelGreen) {
+        this.middelGreen = middelGreen;
+    }
+
+    public Double getHighGreen() {
+        return highGreen;
+    }
+
+    public void setHighGreen(Double highGreen) {
+        this.highGreen = highGreen;
+    }
+
+    public Double getPlatinum() {
+        return platinum;
+    }
+
+    public void setPlatinum(Double platinum) {
+        this.platinum = platinum;
     }
 }

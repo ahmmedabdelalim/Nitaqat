@@ -17,8 +17,9 @@ public class ActivitiesReportRepository {
     }
 
 
-    public List<ActivitiesReportDTO> getActivitiesReport() {
+    public List<ActivitiesReportDTO> getActivitiesReport(Long activityId) {
 
+        String condition = (activityId != null) ? "WHERE a.id = " + activityId : "";
 
 
         String sql = """
@@ -27,14 +28,24 @@ public class ActivitiesReportRepository {
                          a.name AS company_name,
                          a.percentage AS required_saudization_percentage,
                          COUNT(p.id) AS total_employees,
-                         SUM(CASE WHEN p.nationality = 'سعودي' THEN 1 ELSE 0 END) AS total_saudi_employees,
+                         SUM(CASE WHEN p.nationality = 'سعودي' THEN 1
+                          WHEN p.nationality = 'سعودي معاق' THEN 4
+                          ELSE 0 END) AS total_saudi_employees,
                          ROUND(
-                             (SUM(CASE WHEN p.nationality = 'سعودي' THEN 1 ELSE 0 END) * 100.0) / NULLIF(COUNT(p.id), 0),
+                             (SUM(CASE WHEN p.nationality = 'سعودي' THEN 1
+                              WHEN p.nationality = 'سعودي معاق' THEN 4
+                              ELSE 0 END) * 100.0) / NULLIF(COUNT(p.id), 0),
                              2
-                         ) AS actual_saudization_percentage
+                         ) AS actual_saudization_percentage,
+                         a.low_green AS LowGreen,
+                         a.middel_green AS MiddelGreen,
+                         a.high_green  AS HighGreen,
+                         a.platinum  AS Platinum
                      FROM activities a
                      LEFT JOIN professions p
                          ON p.company_code = a.company_code
+                         
+                     %s
                      GROUP BY
                          a.company_code,
                          a.name,
@@ -42,7 +53,7 @@ public class ActivitiesReportRepository {
                      ORDER BY
                          a.company_code;
                 
-        """;
+        """.formatted(condition);
 
         return jdbcTemplate.query(sql,
                 (rs, rowNum) ->
@@ -52,7 +63,12 @@ public class ActivitiesReportRepository {
                                 rs.getInt("total_employees"),
                                 rs.getInt("total_saudi_employees"),
                                 rs.getDouble("required_saudization_percentage"),
-                                rs.getDouble("actual_saudization_percentage")
+                                rs.getDouble("actual_saudization_percentage"),
+                                rs.getDouble("Lowgreen"),
+                                rs.getDouble("MiddelGreen"),
+                                rs.getDouble("highGreen"),
+                                rs.getDouble("Platinum")
+
                         )
         );
     }

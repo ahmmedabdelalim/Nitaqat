@@ -7,5 +7,9 @@ public record ActivitiesReportDTO(
         int totalEmployees,
         int totalSaudiEmployees,
         Double requiredSaudizationPercentage,
-        Double actualSaudizationPercentage
+        Double actualSaudizationPercentage,
+        Double LowGreen,
+        Double MiddelGreen,
+        Double HighGreen,
+        Double Platinum
 ) {}
