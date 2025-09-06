@@ -1,6 +1,7 @@
 package com.nitaqat.nitaqat.repository;
 
 import com.nitaqat.nitaqat.dto.ProfessionReportDTO;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -74,12 +75,11 @@ public class ProfessionReportRepository {
         );
     }
 
-    public List<ProfessionReportDTO> getProfession(Long activityId , Long professionId  ) {
+
+    public List<ProfessionReportDTO> getProfession(Long activityId   ) {
 
         String condition = (activityId != null) ? "WHERE a.id = " + activityId : "";
-        if (professionId != null) {
-            condition += (condition.isEmpty() ? " WHERE " : " AND ") + "p.id = " + professionId;
-        }
+
 
         String sql = """
             SELECT 
@@ -88,7 +88,7 @@ public class ProfessionReportRepository {
                 a.name AS company_name,
                 sp.saudization_catageory,
                 sp.saudization_catageory_ar,
-                COUNT(p.id) AS total_employees,
+                SUM(CASE WHEN p.nationality = 'سعودي معاق' THEN 4 ELSE 1 END ) AS total_employees,
                 
                 SUM(CASE WHEN p.nationality = 'سعودي' THEN 1
                  WHEN p.nationality = 'سعودي معاق' THEN 4

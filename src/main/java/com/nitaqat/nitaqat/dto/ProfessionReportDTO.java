@@ -1,7 +1,7 @@
 package com.nitaqat.nitaqat.dto;
 
 public record ProfessionReportDTO(
-        int ID,
+        int id,
         String companyCode,
         String companyName,
         String saudizationCatageory,
@@ -10,4 +10,14 @@ public record ProfessionReportDTO(
         int totalSaudiEmployees,
         Double requiredSaudizationPercentage,
         Double actualSaudizationPercentage
-) {}
+
+
+) {
+
+
+    public int getId() {
+        return id;
+    }
+
+
+}

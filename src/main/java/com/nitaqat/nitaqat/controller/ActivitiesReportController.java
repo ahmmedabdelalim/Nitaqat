@@ -1,6 +1,7 @@
 package com.nitaqat.nitaqat.controller;
 
 
+import com.nitaqat.nitaqat.dto.ActivitiesAnalysisDTO;
 import com.nitaqat.nitaqat.dto.ActivitiesReportDTO;
 import com.nitaqat.nitaqat.dto.ProfessionReportDTO;
 import com.nitaqat.nitaqat.dto.ReportApiResponse;
@@ -32,6 +33,20 @@ public class ActivitiesReportController {
 
         ReportApiResponse<List<ActivitiesReportDTO>> response =
                 new ReportApiResponse<>(true, "Activity report fetched successfully", HttpStatus.OK.value(), report);
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping("/api/get-activity-analysis")
+    public ResponseEntity<ReportApiResponse<List<ActivitiesAnalysisDTO>>> getActivitieAnalysis(
+            @RequestParam(required = false) Long activityId
+    )
+    {
+        List<ActivitiesAnalysisDTO> report = activitiesReportRepository.getActivitieAnalysis(activityId);
+
+        ReportApiResponse<List<ActivitiesAnalysisDTO>> response =
+                new ReportApiResponse<>(true, "Activity Analysis fetched successfully", HttpStatus.OK.value(), report);
 
         return ResponseEntity.ok(response);
     }

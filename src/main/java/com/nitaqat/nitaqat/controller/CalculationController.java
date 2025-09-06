@@ -40,16 +40,36 @@ public class CalculationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/api/professions-calculation")
-    public ResponseEntity<ReportApiResponse<List<ProfessionReportDTO>>> getProfessionReport(
+    @GetMapping("/api/get-profession-for-activity")
+    public ResponseEntity<ReportApiResponse<List<ProfessionReportDTO>>> getProfessionForActivity(
+            @RequestParam(required = false) Long activityId
+    ) {
+
+        List<ProfessionReportDTO> report = reportRepository.getProfession(activityId);
+
+        ReportApiResponse<List<ProfessionReportDTO>> response =
+                new ReportApiResponse<>(true, "Professions fetched successfully", HttpStatus.OK.value(), report);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/get-profession")
+    public ResponseEntity<ReportApiResponse<List<ProfessionReportDTO>>> getProfession(
             @RequestParam(required = false) Long activityId,
             @RequestParam (required = false) Long professionId
     ) {
 
-        List<ProfessionReportDTO> report = reportRepository.getProfession(activityId , professionId);
+        List<ProfessionReportDTO> report = reportRepository.getProfession(activityId);
+
+        // If professionId is provided, filter in memory
+        if (professionId != null) {
+            report = report.stream()
+                    .filter(r -> r.getId() == professionId.intValue())
+                    .toList();
+        }
 
         ReportApiResponse<List<ProfessionReportDTO>> response =
-                new ReportApiResponse<>(true, "Professions report fetched successfully", HttpStatus.OK.value(), report);
+                new ReportApiResponse<>(true, "Profession fetched successfully", HttpStatus.OK.value(), report);
 
         return ResponseEntity.ok(response);
     }
