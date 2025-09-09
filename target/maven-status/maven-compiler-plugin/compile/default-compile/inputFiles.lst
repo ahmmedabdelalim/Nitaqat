@@ -2,12 +2,15 @@ D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\config\SecurityConfig.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\ActivitiesReportController.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\ActivityController.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\AuthController.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\CalculationController.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\ImportController.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\ProfessionReportController.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\ProfessionsController.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\web\DashboardController.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\web\WebAuthController.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\ActivitiesAnalysisDTO.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\ActivitiesReportDTO.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\ActivityDto.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\ActivityHierarchyDTO.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\ApiResponse.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\AuthorizationRequest.java

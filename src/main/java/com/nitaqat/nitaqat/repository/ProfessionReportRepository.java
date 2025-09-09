@@ -30,17 +30,16 @@ public class ProfessionReportRepository {
                 sp.saudization_catageory_ar,
                 COUNT(p.id) AS total_employees,
                 
-                SUM(CASE WHEN p.nationality = 'سعودي' THEN 1
-                 WHEN p.nationality = 'سعودي معاق' THEN 4
-                 ELSE 0 END) AS total_saudi_employees,
+                SUM(CASE WHEN p.nationality LIKE 'سعودي%' THEN 1 ELSE 0 END) AS total_saudi_employees,
+                
                  
                 sp.saudization_percentage AS required_saudization_percentage,
                 ROUND(
-                    (SUM(CASE WHEN p.nationality = 'سعودي' THEN 1
-                     WHEN p.nationality = 'سعودي معاق' THEN 4
-                      ELSE 0 END) * 100.0) / NULLIF(COUNT(p.id), 0),
-                    2
-                ) AS actual_saudization_percentage
+                          (SUM(CASE WHEN p.nationality LIKE 'سعودي%' THEN 1 ELSE 0 END) * 100.0) /
+                          NULLIF(COUNT(p.id), 0),
+                          2
+                      ) AS actual_saudization_percentage
+                      
             FROM professions p
             JOIN saudization_percentage sp 
                 ON p.job = sp.job
@@ -48,6 +47,7 @@ public class ProfessionReportRepository {
                 ON p.company_code = a.company_code
             %s
             GROUP BY 
+                p.id,
                 p.company_code,
                 a.name,
                 sp.saudization_catageory,
@@ -57,7 +57,7 @@ public class ProfessionReportRepository {
                 p.company_code,
                 sp.saudization_catageory
                 
-        """.formatted(condition);
+        """.replace("%s", condition);
 
         return jdbcTemplate.query(sql,
                 (rs, rowNum) ->
@@ -88,19 +88,15 @@ public class ProfessionReportRepository {
                 a.name AS company_name,
                 sp.saudization_catageory,
                 sp.saudization_catageory_ar,
-                SUM(CASE WHEN p.nationality = 'سعودي معاق' THEN 4 ELSE 1 END ) AS total_employees,
-                
-                SUM(CASE WHEN p.nationality = 'سعودي' THEN 1
-                 WHEN p.nationality = 'سعودي معاق' THEN 4
-                 ELSE 0 END) AS total_saudi_employees,
-                 
+                COUNT(p.id) AS total_employees,                
+                SUM(CASE WHEN p.nationality LIKE 'سعودي%' THEN 1 ELSE 0 END) AS total_saudi_employees,
+                     
                 sp.saudization_percentage AS required_saudization_percentage,
-                ROUND(
-                    (SUM(CASE WHEN p.nationality = 'سعودي' THEN 1
-                     WHEN p.nationality = 'سعودي معاق' THEN 4
-                      ELSE 0 END) * 100.0) / NULLIF(COUNT(p.id), 0),
-                    2
-                ) AS actual_saudization_percentage
+                 ROUND(
+                          (SUM(CASE WHEN p.nationality LIKE 'سعودي%' THEN 1 ELSE 0 END) * 100.0) /
+                          NULLIF(COUNT(p.id), 0),
+                          2
+                      ) AS actual_saudization_percentage
             FROM professions p
             JOIN saudization_percentage sp 
                 ON p.job = sp.job
@@ -108,6 +104,7 @@ public class ProfessionReportRepository {
                 ON p.company_code = a.company_code
             %s
             GROUP BY 
+                p.id,
                 p.company_code,
                 a.name,
                 sp.saudization_catageory,
@@ -117,7 +114,7 @@ public class ProfessionReportRepository {
                 p.company_code,
                 sp.saudization_catageory
                 
-        """.formatted(condition);
+        """.replace("%s", condition);
 
         return jdbcTemplate.query(sql,
                 (rs, rowNum) ->

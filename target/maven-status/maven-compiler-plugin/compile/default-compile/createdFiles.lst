@@ -9,10 +9,12 @@ com\nitaqat\nitaqat\controller\ActivityController.class
 com\nitaqat\nitaqat\dto\ProfessionReportDTO.class
 com\nitaqat\nitaqat\dto\ActivitiesReportDTO.class
 com\nitaqat\nitaqat\dto\AuthorizationRequest.class
+com\nitaqat\nitaqat\dto\ActivityDto.class
 com\nitaqat\nitaqat\i18n\YamlMessageSource.class
 com\nitaqat\nitaqat\repository\ActivitiesReportRepository.class
 com\nitaqat\nitaqat\dto\ApiResponse.class
 com\nitaqat\nitaqat\service\ActivityService.class
+com\nitaqat\nitaqat\controller\CalculationController.class
 com\nitaqat\nitaqat\repository\ActivityRepository.class
 com\nitaqat\nitaqat\controller\web\WebAuthController.class
 com\nitaqat\nitaqat\service\ExcelImportService$1.class
@@ -26,6 +28,7 @@ com\nitaqat\nitaqat\security\CustomUserDetailsService.class
 com\nitaqat\nitaqat\service\UserService.class
 com\nitaqat\nitaqat\service\ExcelImportService.class
 com\nitaqat\nitaqat\entity\Profession.class
+com\nitaqat\nitaqat\dto\ActivitiesAnalysisDTO.class
 com\nitaqat\nitaqat\entity\Activity.class
 com\nitaqat\nitaqat\dto\LoginRequest.class
 com\nitaqat\nitaqat\repository\SaudizationPercentageRespository.class
