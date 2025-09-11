@@ -24,6 +24,7 @@ public class ActivitiesReportRepository {
 
         String sql = """
              SELECT
+                         a.id,
                          a.company_code,
                          a.name AS company_name,
                          a.percentage AS required_saudization_percentage,
@@ -65,6 +66,7 @@ public class ActivitiesReportRepository {
                          
                      %s
                      GROUP BY
+                         a.id,
                          a.company_code,
                          a.name,
                          a.percentage,
@@ -80,6 +82,7 @@ public class ActivitiesReportRepository {
         return jdbcTemplate.query(sql,
                 (rs, rowNum) ->
                         new ActivitiesReportDTO(
+                                rs.getInt("id"),
                                 rs.getString("company_code"),
                                 rs.getString("company_name"),
                                 rs.getInt("total_employees"),
