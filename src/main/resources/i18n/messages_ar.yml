@@ -1,8 +1,8 @@
 signup.success: "تم التسجيل بنجاح. تم إخطار المسؤول."
 signup.failure: "فشل التسجيل"
 pages:
-  professions: "المهن"
-  activity: "الأنشطة"
+  report: "التقارير"
+  calculation: "الحسابات"
   upload: "التحميل"
 
 auth:

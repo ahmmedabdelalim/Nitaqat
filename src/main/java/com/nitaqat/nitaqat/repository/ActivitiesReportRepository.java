@@ -183,122 +183,93 @@ public class ActivitiesReportRepository {
 //        """.replace("%s", condition);
 
         String sql = """
-            SELECT
-                CASE 
-                    WHEN p.nationality LIKE 'سعودي%' THEN 'سعودي'
-                    ELSE p.nationality
-                END AS nationality,
+    WITH normalized AS (
+        SELECT 
+            a.company_code,
+            CASE 
+                WHEN p.nationality LIKE 'سعودي%' THEN 'سعودي'
+                ELSE p.nationality
+            END AS nationality,
+            p.id
+        FROM activities a
+        LEFT JOIN professions p
+            ON p.company_code = a.company_code
+        %s
+    )
+    SELECT
+        n.company_code,
+        n.nationality,
+        COUNT(n.id) AS total_by_nationality,
         
-                COUNT(p.id) AS total_by_nationality,
+        ROUND(
+            (COUNT(n.id) * 100.0) /
+            NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2
+        ) AS percentage,
         
-                ROUND(
-                    (COUNT(p.id) * 100.0) /
-                    NULLIF(SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code), 0), 2
-                ) AS percentage,
+        CASE  
+            WHEN n.nationality = 'سعودي'
+                 THEN 'ملتزم'
+            WHEN n.nationality IN ('هندي', 'بنغالي')
+                 AND ROUND((COUNT(n.id) * 100.0) /
+                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 40
+                 THEN 'مخالف (تجاوز 40%)'
+            WHEN n.nationality = 'يمني'
+                 AND ROUND((COUNT(n.id) * 100.0) /
+                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 25
+                 THEN 'مخالف (تجاوز 25%)'
+            WHEN n.nationality = 'أثيوبي'
+                 AND ROUND((COUNT(n.id) * 100.0) /
+                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 1
+                 THEN 'مخالف (تجاوز 1%)'
+            WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code)) <= 19
+                 THEN 'مسموح (عدد موظفين ≤ 19)'
+            WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code)) BETWEEN 20 AND 49
+                 AND ROUND((COUNT(n.id) * 100.0) /
+                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 70
+                 THEN 'مخالف (تجاوز 70%)'
+            WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code)) >= 50
+                 AND ROUND((COUNT(n.id) * 100.0) /
+                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 40
+                 THEN 'مخالف (تجاوز 40%)'
+            ELSE 'ملتزم'
+        END AS status,
         
-                CASE  
-                    WHEN (CASE 
-                             WHEN p.nationality LIKE 'سعودي%' THEN 'سعودي'
-                             ELSE p.nationality
-                          END) = 'سعودي'
-                         THEN 'ملتزم'   -- السعوديين دايمًا ملتزم
-        
-                    WHEN (CASE 
-                             WHEN p.nationality LIKE 'سعودي%' THEN 'سعودي'
-                             ELSE p.nationality
-                          END) IN ('هندي', 'بنغالي')
-                         AND ROUND((COUNT(p.id) * 100.0) /
-                                   NULLIF(SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code), 0), 2) > 40
-                         THEN 'مخالف (تجاوز 40%)'
-        
-                    WHEN (CASE 
-                             WHEN p.nationality LIKE 'سعودي%' THEN 'سعودي'
-                             ELSE p.nationality
-                          END) = 'يمني'
-                         AND ROUND((COUNT(p.id) * 100.0) /
-                                   NULLIF(SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code), 0), 2) > 25
-                         THEN 'مخالف (تجاوز 25%)'
-        
-                    WHEN (CASE 
-                             WHEN p.nationality LIKE 'سعودي%' THEN 'سعودي'
-                             ELSE p.nationality
-                          END) = 'أثيوبي'
-                         AND ROUND((COUNT(p.id) * 100.0) /
-                                   NULLIF(SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code), 0), 2) > 1
-                         THEN 'مخالف (تجاوز 1%)'
-        
-                    WHEN (SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code)) <= 19
-                         THEN 'مسموح (عدد موظفين أقل من او يساوى 19)'
-        
-                    WHEN (SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code)) BETWEEN 20 AND 49
-                         AND ROUND((COUNT(p.id) * 100.0) /
-                                   NULLIF(SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code), 0), 2) > 70
-                         THEN 'مخالف (تجاوز 70%)'
-        
-                    WHEN (SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code)) >= 50
-                         AND ROUND((COUNT(p.id) * 100.0) /
-                                   NULLIF(SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code), 0), 2) > 40
-                         THEN 'مخالف (تجاوز 40%)'
-        
-                    ELSE 'ملتزم'
-                END AS status,
-        
+        CASE
+            WHEN n.nationality = 'سعودي'
+                 THEN 'green'
+            WHEN (
                 CASE
-                    WHEN (CASE 
-                             WHEN p.nationality LIKE 'سعودي%' THEN 'سعودي'
-                             ELSE p.nationality
-                          END) = 'سعودي'
-                         THEN 'green'   -- السعوديين دايمًا أخضر
+                    WHEN n.nationality IN ('هندي', 'بنغالي')
+                         AND ROUND((COUNT(n.id) * 100.0) /
+                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 40
+                         THEN 1
+                    WHEN n.nationality = 'يمني'
+                         AND ROUND((COUNT(n.id) * 100.0) /
+                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 25
+                         THEN 1
+                    WHEN n.nationality = 'أثيوبي'
+                         AND ROUND((COUNT(n.id) * 100.0) /
+                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 1
+                         THEN 1
+                    WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code)) BETWEEN 20 AND 49
+                         AND ROUND((COUNT(n.id) * 100.0) /
+                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 70
+                         THEN 1
+                    WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code)) >= 50
+                         AND ROUND((COUNT(n.id) * 100.0) /
+                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 40
+                         THEN 1
+                    ELSE 0
+                END
+            ) = 1 THEN 'red'
+            ELSE 'green'
+        END AS status_color
         
-                    WHEN (
-                        CASE
-                            WHEN (CASE 
-                                     WHEN p.nationality LIKE 'سعودي%' THEN 'سعودي'
-                                     ELSE p.nationality
-                                 END) IN ('هندي', 'بنغالي')
-                                 AND ROUND((COUNT(p.id) * 100.0) /
-                                           NULLIF(SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code), 0), 2) > 40
-                                 THEN 1
-                            WHEN (CASE 
-                                     WHEN p.nationality LIKE 'سعودي%' THEN 'سعودي'
-                                     ELSE p.nationality
-                                 END) = 'يمني'
-                                 AND ROUND((COUNT(p.id) * 100.0) /
-                                           NULLIF(SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code), 0), 2) > 25
-                                 THEN 1
-                            WHEN (CASE 
-                                     WHEN p.nationality LIKE 'سعودي%' THEN 'سعودي'
-                                     ELSE p.nationality
-                                 END) = 'أثيوبي'
-                                 AND ROUND((COUNT(p.id) * 100.0) /
-                                           NULLIF(SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code), 0), 2) > 1
-                                 THEN 1
-                            WHEN (SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code)) BETWEEN 20 AND 49
-                                 AND ROUND((COUNT(p.id) * 100.0) /
-                                           NULLIF(SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code), 0), 2) > 70
-                                 THEN 1
-                            WHEN (SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code)) >= 50
-                                 AND ROUND((COUNT(p.id) * 100.0) /
-                                           NULLIF(SUM(COUNT(p.id)) OVER (PARTITION BY a.company_code), 0), 2) > 40
-                                 THEN 1
-                            ELSE 0
-                        END
-                    ) = 1 THEN 'red'
-                    ELSE 'green'
-                END AS status_color
-        
-            FROM activities a
-            LEFT JOIN professions p
-                ON p.company_code = a.company_code
-            %s
-            GROUP BY a.company_code,
-                     CASE 
-                        WHEN p.nationality LIKE 'سعودي%' THEN 'سعودي'
-                        ELSE p.nationality
-                     END
-            HAVING SUM(CASE WHEN p.id IS NULL THEN 0 ELSE 1 END) > 0
-            ORDER BY total_by_nationality DESC;
-        """.replace("%s", condition);
+    FROM normalized n
+    GROUP BY n.company_code, n.nationality
+    ORDER BY total_by_nationality DESC;
+""".replace("%s", condition);
+
 
 
         return jdbcTemplate.query(sql,

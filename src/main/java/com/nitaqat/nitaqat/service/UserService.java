@@ -58,12 +58,10 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("auth.user_not_found"));
 
         switch (pageName.toLowerCase()) {
-            case "professions":
+            case "report":
                 return user.isProfessions_active();
-            case "activity":
+            case "calculation":
                 return user.isActivity_active();
-            case "upload":
-                return user.isUpload_active();
             default:
                 throw new IllegalArgumentException("auth.unknown_page");
         }

@@ -24,10 +24,11 @@ public class DashboardController {
     {
         User user = userRepository.findById(updateUser.getId())
                 .orElseThrow(()->new RuntimeException("User not Found"));
+        user.setName(updateUser.getName());
         user.setEmail(updateUser.getEmail());
         user.setRole(updateUser.getRole());
         user.setActive(updateUser.isActive());
-        user.setUpload_active(updateUser.isUpload_active());
+        user.setUpload_active(true);
         user.setProfessions_active(updateUser.isProfessions_active());
         user.setActivity_active(updateUser.isActivity_active());
 

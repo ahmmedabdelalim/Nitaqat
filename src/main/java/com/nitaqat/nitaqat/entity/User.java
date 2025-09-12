@@ -16,7 +16,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+
     private String name;
 
     @Email
@@ -33,10 +33,6 @@ public class User {
     private boolean activity_active = false ;
     private boolean upload_active = false ;
 
-    @Column(name = "test")
-    @NotBlank
-
-    private String test ;
 
     @Nullable
     public String getRole() {

@@ -1,8 +1,8 @@
 signup.success: "Signup successful. Admin has been notified."
 signup.failure: "Signup failed"
 pages:
-  professions: "Professions"
-  activity: "Activity"
+  report: "Report"
+  calculation: "Calculation"
   upload: "Upload"
 
 auth:
