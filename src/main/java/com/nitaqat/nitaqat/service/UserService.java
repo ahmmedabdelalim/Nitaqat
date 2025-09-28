@@ -45,7 +45,7 @@ public class UserService {
         user.setCreatedAt(LocalDateTime.now());
 
         userRepository.save(user);
-        emailService.notifyAdminOfNewUser(user.getEmail());
+        emailService.notifyAdminOfNewUser(user.getEmail() , user.getName());
     }
 
     public Optional<User> findByEmail(String email) {

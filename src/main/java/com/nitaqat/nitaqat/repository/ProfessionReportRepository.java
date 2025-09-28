@@ -23,7 +23,7 @@ public class ProfessionReportRepository {
 
         String sql = """
             SELECT 
-                p.id,
+                MIN(p.id) AS profession_id,
                 p.company_code,
                 a.name AS company_name,
                 sp.saudization_catageory,
@@ -47,7 +47,7 @@ public class ProfessionReportRepository {
                 ON p.company_code = a.company_code
             %s
             GROUP BY 
-                p.id,
+               
                 p.company_code,
                 a.name,
                 sp.saudization_catageory,
@@ -62,7 +62,7 @@ public class ProfessionReportRepository {
         return jdbcTemplate.query(sql,
                 (rs, rowNum) ->
                 new ProfessionReportDTO(
-                        rs.getInt("id"),
+                        rs.getInt("profession_id"),
                         rs.getString("company_code"),
                         rs.getString("company_name"),
                         rs.getString("saudization_catageory"),
@@ -83,7 +83,7 @@ public class ProfessionReportRepository {
 
         String sql = """
             SELECT 
-                p.id,
+                 MIN(p.id) AS profession_id,
                 p.company_code,
                 a.name AS company_name,
                 sp.saudization_catageory,
@@ -104,7 +104,7 @@ public class ProfessionReportRepository {
                 ON p.company_code = a.company_code
             %s
             GROUP BY 
-                p.id,
+                
                 p.company_code,
                 a.name,
                 sp.saudization_catageory,
@@ -119,7 +119,7 @@ public class ProfessionReportRepository {
         return jdbcTemplate.query(sql,
                 (rs, rowNum) ->
                         new ProfessionReportDTO(
-                                rs.getInt("id"),
+                                rs.getInt("profession_id"),
                                 rs.getString("company_code"),
                                 rs.getString("company_name"),
                                 rs.getString("saudization_catageory"),

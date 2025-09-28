@@ -33,8 +33,9 @@ public class ActivitiesReportRepository {
                           WHEN p.nationality = 'سعودي مسجون' THEN 2
                           WHEN p.nationality = 'سعودي وقف جنائي' THEN 2
                           WHEN p.nationality = 'سعودي موقوف جنائي' THEN 2
-                          
-                          ELSE 1 END ) AS total_employees,
+                          WHEN p.id IS NOT NULL THEN 1
+                       
+                          ELSE 0 END ) AS total_employees,
                          
                          SUM(CASE WHEN p.nationality = 'سعودي' THEN 1
                           WHEN p.nationality = 'سعودي معاق' THEN 4

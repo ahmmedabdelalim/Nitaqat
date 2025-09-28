@@ -12,11 +12,11 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void notifyAdminOfNewUser(String email) {
+    public void notifyAdminOfNewUser(String email , String name) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo("am909962@gmail.com");
         message.setSubject("New User Signup");
-        message.setText("A new user signed up with email in NITAQAT : " + email);
+        message.setText("A new user signed up with name " + name+ " and email in NITAQAT : " + email);
         mailSender.send(message);
     }
 }

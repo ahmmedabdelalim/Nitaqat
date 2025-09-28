@@ -21,6 +21,8 @@ import java.util.Optional;
 import org.springframework.context.MessageSource;
 import java.util.Locale;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 
 
@@ -36,17 +38,19 @@ public class AuthController {
     private UserService userService;
     @Autowired
     private MessageSource messageSource;
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
 
     @PostMapping(value = "/api/auth/signup", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public ResponseEntity<ApiResponse> signup(
-            @Valid @RequestBody SignupRequest request ,
+            @Valid @RequestBody SignupRequest request,
             @RequestHeader(value = "Accept-Language", required = false) String acceptLang) {
+
         Locale locale;
         if (request.getLang() != null && !request.getLang().isBlank()) {
             // normalize: en_US -> en-US
-            locale = Locale.forLanguageTag(request.getLang().replace('_','-'));
+            locale = Locale.forLanguageTag(request.getLang().replace('_', '-'));
         } else if (acceptLang != null && !acceptLang.isBlank()) {
             locale = Locale.forLanguageTag(acceptLang);
         } else {
@@ -55,13 +59,48 @@ public class AuthController {
 
         try {
             userService.signup(request);
+
             String msg = messageSource.getMessage("signup.success", null, locale);
             return ResponseEntity.ok(new ApiResponse(true, msg, 200, null));
+
         } catch (Exception e) {
-            String msg = messageSource.getMessage("signup.failure", new Object[]{e.getMessage()}, locale);
-            return ResponseEntity.status(400).body(new ApiResponse(false, msg, 400, null));
+            // log the full stack trace for debugging
+            log.error("Signup failed for email {}: {}", request.getEmail(), e.getMessage(), e);
+
+            // safe message for the client
+            String msg = messageSource.getMessage("signup.failure", null, locale);
+
+            // return response with error details (only short message, not full stack trace)
+            return ResponseEntity
+                    .status(400)
+                    .body(new ApiResponse(false, e.getMessage(), 400, null));
         }
     }
+
+//    @PostMapping(value = "/api/auth/signup", produces = "application/json; charset=UTF-8")
+//    @ResponseBody
+//    public ResponseEntity<ApiResponse> signup(
+//            @Valid @RequestBody SignupRequest request ,
+//            @RequestHeader(value = "Accept-Language", required = false) String acceptLang) {
+//        Locale locale;
+//        if (request.getLang() != null && !request.getLang().isBlank()) {
+//            // normalize: en_US -> en-US
+//            locale = Locale.forLanguageTag(request.getLang().replace('_','-'));
+//        } else if (acceptLang != null && !acceptLang.isBlank()) {
+//            locale = Locale.forLanguageTag(acceptLang);
+//        } else {
+//            locale = LocaleContextHolder.getLocale();
+//        }
+//
+//        try {
+//            userService.signup(request);
+//            String msg = messageSource.getMessage("signup.success", null, locale);
+//            return ResponseEntity.ok(new ApiResponse(true, msg, 200, null));
+//        } catch (Exception e) {
+//            String msg = messageSource.getMessage("signup.failure", new Object[]{e.getMessage()}, locale);
+//            return ResponseEntity.status(400).body(new ApiResponse(false, msg, 400, null));
+//        }
+//    }
 
     @PostMapping("/api/auth/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest loginRequest , BindingResult bindingResult) {
