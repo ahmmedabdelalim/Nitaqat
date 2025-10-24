@@ -59,10 +59,10 @@
                         <label for="editActive" class="form-check-label">Active</label>
                     </div>
 
-<!--                    <div class="mb-3 form-check">-->
-<!--                        <input type="checkbox" id="editUploadActive" name="upload_active" class="form-check-input">-->
-<!--                        <label for="editUploadActive" class="form-check-label">Upload Active</label>-->
-<!--                    </div>-->
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" id="editUploadActive" name="upload_active" class="form-check-input">
+                        <label for="editUploadActive" class="form-check-label">Upload Active</label>
+                    </div>
 
                     <div class="mb-3 form-check">
                         <input type="checkbox" id="editProfessionsActive" name="professions_active" class="form-check-input">
@@ -105,7 +105,7 @@
                     <th>Email</th>
                     <th>Role</th>
                     <th>Active</th>
-
+                    <th>Upload Active</th>
                     <th>Report Active</th>
                     <th>Calculation Active</th>
                     <th>Actions</th>
@@ -117,6 +117,7 @@
                     <td th:text="${user.email}"></td>
                     <td th:text="${user.role}"></td>
                     <td><input type="checkbox" th:checked="${user.active}" disabled></td>
+                    <td><input type="checkbox" th:checked="${user.upload_active}" disabled></td>
                     <td><input type="checkbox" th:checked="${user.professions_active}" disabled></td>
                     <td><input type="checkbox" th:checked="${user.activity_active}" disabled></td>
                     <td>
@@ -126,6 +127,7 @@
                      data-email=${user.email},
                      data-role=${user.role},
                      data-active=${user.active},
+                     data-upload=${user.upload_active},
                      data-professions=${user.professions_active},
                      data-activity=${user.activity_active}"
                                 onclick="openEditModalFromButton(this)">
@@ -146,6 +148,7 @@
                     <th>Email</th>
                     <th>Role</th>
                     <th>Active</th>
+                    <th>Upload Active</th>
                     <th>Report Active</th>
                     <th>Calculation Active</th>
                     <th>Actions</th>
@@ -157,6 +160,7 @@
                     <td th:text="${user.email}"></td>
                     <td th:text="${user.role}"></td>
                     <td><input type="checkbox" th:checked="${user.active}" disabled></td>
+                    <td><input type="checkbox" th:checked="${user.upload_active}" disabled></td>
                     <td><input type="checkbox" th:checked="${user.professions_active}" disabled></td>
                     <td><input type="checkbox" th:checked="${user.activity_active}" disabled></td>
                     <td>
@@ -166,6 +170,7 @@
                      data-email=${user.email},
                      data-role=${user.role},
                      data-active=${user.active},
+                     data-upload=${user.upload_active},
                      data-professions=${user.professions_active},
                      data-activity=${user.activity_active}"
                                 onclick="openEditModalFromButton(this)">
@@ -188,18 +193,21 @@
     const email = button.dataset.email;
     const role = button.dataset.role;
     const active = button.dataset.active === "true";
+    const upload = button.dataset.upload === "true";
     const professions = button.dataset.professions === "true";
     const activity = button.dataset.activity === "true";
 
-    openEditModal(id, name , email, role, active,  professions, activity);
+    openEditModal(id, name , email, role, active, upload,  professions, activity);
 }
 
-    function openEditModal(id, name ,email, role, active , professionsActive, activityActive) {
+    function openEditModal(id, name ,email, role, active , uplaodActive , professionsActive, activityActive) {
     document.getElementById('editUserId').value = id;
     document.getElementById('editName').value = name;
     document.getElementById('editEmail').value = email;
     document.getElementById('editRole').value = role;
     document.getElementById('editActive').checked = active;
+    document.getElementById('editUploadActive').checked = uplaodActive;
+
     document.getElementById('editProfessionsActive').checked = professionsActive;
     document.getElementById('editActivityActive').checked = activityActive;
 
@@ -213,6 +221,7 @@ function saveUser() {
         email: document.getElementById('editEmail').value,
         role: document.getElementById('editRole').value,
         active: document.getElementById('editActive').checked,
+        upload_active: document.getElementById('editUploadActive').checked,
         professions_active: document.getElementById('editProfessionsActive').checked,
         activity_active: document.getElementById('editActivityActive').checked
     };
@@ -220,7 +229,8 @@ function saveUser() {
     fetch('/dashboard/edit-user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        credentials: 'include'
     }).then(response => {
         if (response.ok) {
             location.reload(); // Reload to see updated table

@@ -62,6 +62,8 @@ public class UserService {
                 return user.isProfessions_active();
             case "calculation":
                 return user.isActivity_active();
+            case "upload":
+                return user.isUpload_active();
             default:
                 throw new IllegalArgumentException("auth.unknown_page");
         }

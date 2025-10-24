@@ -77,30 +77,6 @@ public class AuthController {
         }
     }
 
-//    @PostMapping(value = "/api/auth/signup", produces = "application/json; charset=UTF-8")
-//    @ResponseBody
-//    public ResponseEntity<ApiResponse> signup(
-//            @Valid @RequestBody SignupRequest request ,
-//            @RequestHeader(value = "Accept-Language", required = false) String acceptLang) {
-//        Locale locale;
-//        if (request.getLang() != null && !request.getLang().isBlank()) {
-//            // normalize: en_US -> en-US
-//            locale = Locale.forLanguageTag(request.getLang().replace('_','-'));
-//        } else if (acceptLang != null && !acceptLang.isBlank()) {
-//            locale = Locale.forLanguageTag(acceptLang);
-//        } else {
-//            locale = LocaleContextHolder.getLocale();
-//        }
-//
-//        try {
-//            userService.signup(request);
-//            String msg = messageSource.getMessage("signup.success", null, locale);
-//            return ResponseEntity.ok(new ApiResponse(true, msg, 200, null));
-//        } catch (Exception e) {
-//            String msg = messageSource.getMessage("signup.failure", new Object[]{e.getMessage()}, locale);
-//            return ResponseEntity.status(400).body(new ApiResponse(false, msg, 400, null));
-//        }
-//    }
 
     @PostMapping("/api/auth/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest loginRequest , BindingResult bindingResult) {
@@ -178,9 +154,7 @@ public class AuthController {
                     .body(new ApiResponse(false, responseMessage, 400));
         }
 
-//        return ResponseEntity.ok(
-//                new ApiResponse(authorized, responseMessage, authorized ? 200 : 400)
-//        );
+
     }
 
 

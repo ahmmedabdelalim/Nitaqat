@@ -34,7 +34,7 @@ public class ExcelImportService {
         this.saudizationPercentageRespository = saudizationPercentageRespository;
     }
 
-    public void importActivitiesFromExcel(MultipartFile file) throws IOException {
+    public void importActivitiesFromExcel(MultipartFile file , Long userId) throws IOException {
         if (file == null || file.isEmpty()) {
             throw new RuntimeException("Uploaded file is empty or missing");
         }
@@ -61,38 +61,34 @@ public class ExcelImportService {
 
                 Activity activity = new Activity();
 
-                String PrimaryColumn = getCellValue(row.getCell(0));
-                activity.setPrimaryColumn((PrimaryColumn == null || PrimaryColumn.trim().isEmpty()) ? null : Integer.valueOf(PrimaryColumn));
 
-                activity.setName(getCellValue(row.getCell(1)));
-                activity.setCompanyCode(getCellValue(row.getCell(2)));
+                activity.setName(getCellValue(row.getCell(0)));
 
-                String parentIdStr = getCellValue(row.getCell(3));
-                activity.setParentId((parentIdStr == null || parentIdStr.trim().isEmpty()) ? null : Integer.valueOf(parentIdStr));
+                activity.setUserId(userId);
 
+                activity.setCompanyCode(getCellValue(row.getCell(1)));
 
-
-                String percentageStr = getCellValue(row.getCell(4));
+                String percentageStr = getCellValue(row.getCell(2));
                 activity.setPercentage(
                         (percentageStr == null || percentageStr.trim().isEmpty()) ? null : Long.parseLong(percentageStr.trim())
                 );
 
-                String lowGreen = getCellValue(row.getCell(5));
+                String lowGreen = getCellValue(row.getCell(3));
                 activity.setLowGreen(
                         (lowGreen == null || lowGreen.trim().isEmpty()) ? null : Double.parseDouble(lowGreen.trim())
                 );
 
-                String middelGreen = getCellValue(row.getCell(6));
+                String middelGreen = getCellValue(row.getCell(4));
                 activity.setMiddelGreen(
                         (middelGreen == null || middelGreen.trim().isEmpty()) ? null : Double.parseDouble(middelGreen.trim())
                 );
 
-                String highGreen = getCellValue(row.getCell(7));
+                String highGreen = getCellValue(row.getCell(5));
                 activity.setHighGreen(
                         (highGreen == null || highGreen.trim().isEmpty()) ? null : Double.parseDouble(highGreen.trim())
                 );
 
-                String platinum = getCellValue(row.getCell(8));
+                String platinum = getCellValue(row.getCell(6));
                 activity.setPlatinum(
                         (platinum == null || platinum.trim().isEmpty()) ? null : Double.parseDouble(platinum.trim())
                 );
@@ -107,7 +103,7 @@ public class ExcelImportService {
         }
     }
 
-    public void importProfessionsFromExcel (MultipartFile file) throws IOException
+    public void importProfessionsFromExcel (MultipartFile file , Long userId , Long activityId) throws IOException
     {
         if (file == null || file.isEmpty()) {
             throw new RuntimeException("Uploaded file is empty or missing");
@@ -130,6 +126,10 @@ public class ExcelImportService {
                 if (row == null) continue;
 
                 Profession profession = new Profession();
+
+                profession.setUserId(userId);
+                profession.setActivityId(activityId);
+
                 String employeeCode = getCellValue(row.getCell(0));
                 profession.setEmployeeCode(employeeCode.isEmpty() ? null : employeeCode);
 

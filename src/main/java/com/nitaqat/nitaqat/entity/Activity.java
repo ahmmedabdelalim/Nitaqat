@@ -14,17 +14,18 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="primary_cloumn")
-    private Integer primaryColumn;
+    @Column(name = "user_id", insertable = true, updatable = true)
+    private Long userId;
+
+    // ✅ Define the relation (read-only mapping of the same column)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
 
     private String name;
 
     @Column(name = "company_code")
     private String companyCode;
-
-
-    @Column(name = "parent_id")
-    private Integer parentId;
 
     @Column(name = "percentage")
     private Long percentage;
@@ -52,12 +53,12 @@ public class Activity {
         this.id = id;
     }
 
-    public Integer getPrimaryColumn() {
-        return primaryColumn;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setPrimaryColumn(Integer primaryColumn) {
-        this.primaryColumn = primaryColumn;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -74,14 +75,6 @@ public class Activity {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
-    }
-
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
     }
 
     public Long getPercentage() {

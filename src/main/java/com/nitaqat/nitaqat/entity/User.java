@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Null;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name=  "users")
@@ -33,6 +34,9 @@ public class User {
     private boolean activity_active = false ;
     private boolean upload_active = false ;
 
+    // ✅ One user can have many activities
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Activity> activities;
 
     @Nullable
     public String getRole() {

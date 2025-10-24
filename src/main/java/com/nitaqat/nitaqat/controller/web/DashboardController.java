@@ -28,7 +28,7 @@ public class DashboardController {
         user.setEmail(updateUser.getEmail());
         user.setRole(updateUser.getRole());
         user.setActive(updateUser.isActive());
-        user.setUpload_active(true);
+        user.setUpload_active(updateUser.isUpload_active());
         user.setProfessions_active(updateUser.isProfessions_active());
         user.setActivity_active(updateUser.isActivity_active());
 
