@@ -24,7 +24,7 @@ public class ProfessionsController {
             @RequestParam(required = false) Long activityId
     ) {
 
-        List<ProfessionReportDTO> report = reportRepository.getProfessionReport(activityId);
+        List<ProfessionReportDTO> report = reportRepository.getProfessionForActivity(activityId);
 
         ReportApiResponse<List<ProfessionReportDTO>> response =
                 new ReportApiResponse<>(true, "Professions fetched successfully", HttpStatus.OK.value(), report);

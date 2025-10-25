@@ -227,11 +227,6 @@ public class ExcelImportService {
 
                 SaudizationPercentage saudizationPercentage = new SaudizationPercentage();
 
-//                String primaryColumn = getCellValue(row.getCell(0));
-//                saudizationPercentage.setPrimaryColumn(primaryColumn.isEmpty() ? null : Long.valueOf(primaryColumn));
-
-                saudizationPercentage.setPrimaryColumn(null);
-
                 String job = getCellValue(row.getCell(1));
                 saudizationPercentage.setJob(job.isEmpty()? null : job);
 

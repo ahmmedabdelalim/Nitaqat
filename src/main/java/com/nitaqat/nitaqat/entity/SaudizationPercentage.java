@@ -10,9 +10,6 @@ public class SaudizationPercentage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="primary_column")
-    private Long PrimaryColumn;
-
     @Column(name="job")
     private String job;
 
@@ -52,13 +49,7 @@ public class SaudizationPercentage {
         this.id = id;
     }
 
-    public Long getPrimaryColumn() {
-        return PrimaryColumn;
-    }
 
-    public void setPrimaryColumn(Long primaryColumn) {
-        PrimaryColumn = primaryColumn;
-    }
 
     public String getJob() {
         return job;

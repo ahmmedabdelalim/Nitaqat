@@ -32,7 +32,7 @@ public class CalculationController {
             @RequestParam(required = false) Long activityId
     )
     {
-        List<ActivitiesReportDTO> report = activitiesReportRepository.getActivitiesReport(activityId);
+        List<ActivitiesReportDTO> report = activitiesReportRepository.getActivitiy(activityId);
 
         ReportApiResponse<List<ActivitiesReportDTO>> response =
                 new ReportApiResponse<>(true, "Activity fetched successfully", HttpStatus.OK.value(), report);
