@@ -59,11 +59,11 @@ public class UserService {
 
         switch (pageName.toLowerCase()) {
             case "report":
-                return user.isProfessions_active();
+                return user.isReports();
             case "calculation":
-                return user.isActivity_active();
+                return user.isCalc();
             case "upload":
-                return user.isUpload_active();
+                return user.isUpload();
             default:
                 throw new IllegalArgumentException("auth.unknown_page");
         }

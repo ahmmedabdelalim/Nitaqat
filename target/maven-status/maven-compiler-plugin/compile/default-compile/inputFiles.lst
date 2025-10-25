@@ -23,6 +23,7 @@ D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\Activity.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\Profession.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\SaudizationPercentage.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\User.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\exception\GlobalExceptionHandler.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\i18n\YamlMessageSource.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\locale\LocalizationConfig.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\NitaqatApplication.java
@@ -33,6 +34,7 @@ D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\ProfessionsRepos
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\SaudizationPercentageRespository.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserRepository.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\CustomUserDetailsService.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\JwtAuthFilter.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\JwtUtils.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\ActivityService.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\EmailService.java

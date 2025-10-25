@@ -30,9 +30,10 @@ public class User {
 
     private boolean active = false;
 
-    private boolean professions_active = false;
-    private boolean activity_active = false ;
-    private boolean upload_active = false ;
+
+    private boolean reports = false;
+    private boolean calc = false ;
+    private boolean upload = false ;
 
     // ✅ One user can have many activities
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -93,28 +94,36 @@ public class User {
         this.active = active;
     }
 
-    public boolean isProfessions_active() {
-        return professions_active;
+    public boolean isReports() {
+        return reports;
     }
 
-    public void setProfessions_active(boolean professions_active) {
-        this.professions_active = professions_active;
+    public void setReports(boolean reports) {
+        this.reports = reports;
     }
 
-    public boolean isActivity_active() {
-        return activity_active;
+    public boolean isCalc() {
+        return calc;
     }
 
-    public void setActivity_active(boolean activity_active) {
-        this.activity_active = activity_active;
+    public void setCalc(boolean calc) {
+        this.calc = calc;
     }
 
-    public boolean isUpload_active() {
-        return upload_active;
+    public boolean isUpload() {
+        return upload;
     }
 
-    public void setUpload_active(boolean upload_active) {
-        this.upload_active = upload_active;
+    public void setUpload(boolean upload) {
+        this.upload = upload;
+    }
+
+    public List<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
     }
 
     public String getName() {

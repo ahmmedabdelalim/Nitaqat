@@ -1,3 +1,4 @@
+com\nitaqat\nitaqat\exception\GlobalExceptionHandler.class
 com\nitaqat\nitaqat\controller\ProfessionsController.class
 com\nitaqat\nitaqat\entity\User.class
 com\nitaqat\nitaqat\repository\ProfessionReportRepository.class
@@ -26,6 +27,7 @@ com\nitaqat\nitaqat\controller\AuthController.class
 com\nitaqat\nitaqat\dto\ReportApiResponse.class
 com\nitaqat\nitaqat\dto\ActivityHierarchyDTO.class
 com\nitaqat\nitaqat\security\CustomUserDetailsService.class
+com\nitaqat\nitaqat\security\JwtAuthFilter.class
 com\nitaqat\nitaqat\service\UserService.class
 com\nitaqat\nitaqat\service\ExcelImportService.class
 com\nitaqat\nitaqat\entity\Profession.class
