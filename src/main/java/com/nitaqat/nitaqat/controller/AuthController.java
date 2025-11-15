@@ -1,8 +1,6 @@
 package com.nitaqat.nitaqat.controller;
 
-import com.nitaqat.nitaqat.dto.AuthorizationRequest;
-import com.nitaqat.nitaqat.dto.LoginRequest;
-import com.nitaqat.nitaqat.dto.SignupRequest;
+import com.nitaqat.nitaqat.dto.*;
 import com.nitaqat.nitaqat.entity.User;
 import com.nitaqat.nitaqat.security.JwtUtils;
 import com.nitaqat.nitaqat.service.RedisSessionService;
@@ -16,10 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import com.nitaqat.nitaqat.dto.ApiResponse;
 import com.nitaqat.nitaqat.aspect.LogUserAction;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.context.MessageSource;
 import java.util.Locale;
@@ -172,8 +171,44 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(false, responseMessage, 400));
         }
+    }
+
+    @GetMapping("api/auth/uploadlist")
+    public ResponseEntity<uploadListApiResponse> uploadList(HttpServletRequest httpServletRequest)
+    {
+        // ----- 1. Check Token -----
+        String header = httpServletRequest.getHeader("Authorization");
+
+        if (header == null || !header.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new uploadListApiResponse(false, "auth.missing_token", 401));
+        }
+
+        // ----- 2. Extract User ID -----
+        String token = header.substring(7);
+        Long userId = jwtUtils.extractUserId(token);
+
+        // get
+        boolean authorized;
+
+        authorized = userService.isUserAuthorized(userId, "saudization_percentage");
 
 
+
+        // ----- 3. Create your list of strings -----
+        List<String> items =  new ArrayList<>();
+        items.add("activities");
+        items.add("professions");
+
+        if(authorized)
+        {
+            items.add("saudization_percentage");
+        }
+
+        // ----- 4. Return response -----
+        return ResponseEntity.ok(
+                new uploadListApiResponse(true, "success", 200, items)
+        );
     }
 
 

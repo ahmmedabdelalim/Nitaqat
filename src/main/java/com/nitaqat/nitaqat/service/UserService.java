@@ -64,6 +64,8 @@ public class UserService {
                 return user.isCalc();
             case "upload":
                 return user.isUpload();
+            case "saudization_percentage":
+               return user.isSaudization_percentage();
             default:
                 throw new IllegalArgumentException("auth.unknown_page");
         }

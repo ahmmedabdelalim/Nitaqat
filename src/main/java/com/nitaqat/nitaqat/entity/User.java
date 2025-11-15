@@ -34,6 +34,8 @@ public class User {
     private boolean reports = false;
     private boolean calc = false ;
     private boolean upload = false ;
+    private boolean saudization_percentage = false;
+
 
     // ✅ One user can have many activities
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -136,5 +138,21 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isSaudization_percentage() {
+        return saudization_percentage;
+    }
+
+    public void setSaudization_percentage(boolean saudization_percentage) {
+        this.saudization_percentage = saudization_percentage;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
