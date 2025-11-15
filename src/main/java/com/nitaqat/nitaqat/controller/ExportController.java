@@ -1,6 +1,7 @@
 package com.nitaqat.nitaqat.controller;
 
 
+import com.nitaqat.nitaqat.aspect.LogUserAction;
 import com.nitaqat.nitaqat.dto.ApiResponse;
 import com.nitaqat.nitaqat.security.JwtUtils;
 import com.nitaqat.nitaqat.service.ExportService;
@@ -24,6 +25,7 @@ public class ExportController {
     @Autowired
     private ExportService exportService;
 
+    @LogUserAction(action = "Export Data")
     @GetMapping("/export")
     public ResponseEntity<?> export(HttpServletRequest request) {
 

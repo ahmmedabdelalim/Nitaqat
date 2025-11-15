@@ -1,14 +1,8 @@
 package com.nitaqat.nitaqat.service;
 
 
-import com.nitaqat.nitaqat.entity.UserActivityDaily;
-import com.nitaqat.nitaqat.entity.UserActivityMonthly;
-import com.nitaqat.nitaqat.entity.UserActivitySummary;
-import com.nitaqat.nitaqat.entity.UserLog;
-import com.nitaqat.nitaqat.repository.UserActivityDailyRepository;
-import com.nitaqat.nitaqat.repository.UserActivityMonthlyRepository;
-import com.nitaqat.nitaqat.repository.UserActivitySummaryRepository;
-import com.nitaqat.nitaqat.repository.UserLogRepository;
+import com.nitaqat.nitaqat.entity.*;
+import com.nitaqat.nitaqat.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,17 +18,19 @@ public class ActivityService {
     private final UserActivityMonthlyRepository monthlyRepo;
     private final UserLogRepository logRepo;
     private final RedisSessionService redisService;
+    private final UserRepository userRepository;
 
     public ActivityService(UserActivitySummaryRepository summaryRepo,
                            UserActivityDailyRepository dailyRepo,
                            UserActivityMonthlyRepository monthlyRepo,
                            UserLogRepository logRepo,
-                           RedisSessionService redisService) {
+                           RedisSessionService redisService, UserRepository userRepository) {
         this.summaryRepo = summaryRepo;
         this.dailyRepo = dailyRepo;
         this.monthlyRepo = monthlyRepo;
         this.logRepo = logRepo;
         this.redisService = redisService;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -116,4 +112,35 @@ public class ActivityService {
         );
         logRepo.save(log);
     }
+
+
+    public void incrementUploadCount(Long userId) {
+
+        Optional<User> user = userRepository.findById(userId);
+
+        UserActivitySummary summary = summaryRepo.findByUserId(userId)
+                .orElseGet(() -> {
+                    UserActivitySummary s = new UserActivitySummary();
+                    s.setUserId(userId);
+
+                    // ✅ Insert username if user exists
+                    user.ifPresent(u -> s.setUsername(u.getName()));
+
+                    s.setUploadCount(0L);
+                    s.setLastActiveAt(LocalDateTime.now());
+                    return s;
+                });
+
+        // If summary existed but username is missing, update it
+        if (summary.getUsername() == null && user.isPresent()) {
+            summary.setUsername(user.get().getName());
+            summary.setLastActiveAt(LocalDateTime.now());
+        }
+
+        summary.setUploadCount(summary.getUploadCount() + 1);
+        summary.setLastActiveAt(LocalDateTime.now());
+
+        summaryRepo.save(summary);
+    }
+
 }

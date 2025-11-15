@@ -173,6 +173,7 @@ public class AuthController {
         }
     }
 
+
     @GetMapping("api/auth/uploadlist")
     public ResponseEntity<uploadListApiResponse> uploadList(HttpServletRequest httpServletRequest)
     {

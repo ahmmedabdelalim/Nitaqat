@@ -1,5 +1,6 @@
 package com.nitaqat.nitaqat.controller;
 
+import com.nitaqat.nitaqat.aspect.LogUserAction;
 import com.nitaqat.nitaqat.dto.ApiResponse;
 import com.nitaqat.nitaqat.dto.ProfessionReportDTO;
 import com.nitaqat.nitaqat.dto.ReportApiResponse;
@@ -27,6 +28,7 @@ public class ProfessionReportController {
         this.reportRepository = reportRepository;
     }
 
+    @LogUserAction(action = "Profession Report")
     @GetMapping("/api/profession-report")
     public ResponseEntity<ReportApiResponse<List<ProfessionReportDTO>>> getProfessionReport(
             @RequestParam(required = false) Long activityId,

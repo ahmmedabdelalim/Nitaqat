@@ -1,6 +1,7 @@
 package com.nitaqat.nitaqat.controller;
 
 
+import com.nitaqat.nitaqat.aspect.LogUserAction;
 import com.nitaqat.nitaqat.dto.ActivitiesAnalysisDTO;
 import com.nitaqat.nitaqat.dto.ActivitiesReportDTO;
 import com.nitaqat.nitaqat.dto.ProfessionReportDTO;
@@ -29,6 +30,7 @@ public class ActivitiesReportController {
         this.activitiesReportRepository = activitiesReportRepository;
     }
 
+    @LogUserAction(action = "Activity Report")
     @GetMapping("/api/activity-report")
     public ResponseEntity<ReportApiResponse<List<ActivitiesReportDTO>>> getActivitiesReport(
             @RequestParam(required = false) Long activityId , HttpServletRequest httpServletRequest
@@ -54,7 +56,7 @@ public class ActivitiesReportController {
         return ResponseEntity.ok(response);
     }
 
-
+    @LogUserAction(action = "Activity Nationalities Report")
     @GetMapping("/api/get-activity-analysis")
     public ResponseEntity<ReportApiResponse<List<ActivitiesAnalysisDTO>>> getActivitieAnalysis(
             @RequestParam(required = false) Long activityId

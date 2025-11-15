@@ -1,5 +1,6 @@
 package com.nitaqat.nitaqat.controller;
 
+import com.nitaqat.nitaqat.aspect.LogUserAction;
 import com.nitaqat.nitaqat.dto.ActivitiesReportDTO;
 import com.nitaqat.nitaqat.dto.ProfessionReportDTO;
 import com.nitaqat.nitaqat.dto.ReportApiResponse;
@@ -27,6 +28,7 @@ public class CalculationController {
         this.reportRepository = reportRepository;
     }
 
+    @LogUserAction(action = "Activity Calculation")
     @GetMapping("/api/activity-calculation")
     public ResponseEntity<ReportApiResponse<List<ActivitiesReportDTO>>> getActivitiesReport(
             @RequestParam(required = false) Long activityId
@@ -52,6 +54,8 @@ public class CalculationController {
 
         return ResponseEntity.ok(response);
     }
+
+    @LogUserAction(action = "Profession Calculation")
 
     @GetMapping("/api/get-profession")
     public ResponseEntity<ReportApiResponse<List<ProfessionReportDTO>>> getProfession(

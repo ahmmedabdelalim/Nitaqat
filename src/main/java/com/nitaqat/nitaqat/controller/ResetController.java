@@ -1,6 +1,7 @@
 package com.nitaqat.nitaqat.controller;
 
 
+import com.nitaqat.nitaqat.aspect.LogUserAction;
 import com.nitaqat.nitaqat.dto.ApiResponse;
 import com.nitaqat.nitaqat.security.JwtUtils;
 import com.nitaqat.nitaqat.service.ResetService;
@@ -23,6 +24,7 @@ public class ResetController {
     @Autowired
     private ResetService resetService;
 
+    @LogUserAction(action = "Reset Data")
     @PostMapping("/reset-data")
     @Transactional
     public ResponseEntity<ApiResponse> resetData(HttpServletRequest request)

@@ -1,8 +1,10 @@
 package com.nitaqat.nitaqat.controller;
 
+import com.nitaqat.nitaqat.aspect.LogUserAction;
 import com.nitaqat.nitaqat.dto.ApiResponse;
 import com.nitaqat.nitaqat.dto.AuthorizationRequest;
 import com.nitaqat.nitaqat.security.JwtUtils;
+import com.nitaqat.nitaqat.service.ActivityService;
 import com.nitaqat.nitaqat.service.ExcelImportService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,15 @@ public class ImportController {
     private final MessageSource messageSource;
     @Autowired
     private JwtUtils jwtUtils;
+    @Autowired
+    private ActivityService userActivitySummaryService;
 
     public ImportController(ExcelImportService excelImportService, MessageSource messageSource) {
         this.excelImportService = excelImportService;
         this.messageSource = messageSource;
     }
 
+    @LogUserAction(action = "Import Data")
     @PostMapping("/api/import")
     public ResponseEntity<ApiResponse> importExcel(
             @RequestParam("type") String type,
@@ -75,6 +80,8 @@ public class ImportController {
                     return ResponseEntity.badRequest()
                             .body(new ApiResponse(false, messageSource.getMessage("unsupported.type", new Object[]{type}, locale), 400));
             }
+
+            userActivitySummaryService.incrementUploadCount(userId);
 
             return ResponseEntity.ok(new ApiResponse(true, messageSource.getMessage("import.success", null, locale), 200));
 
