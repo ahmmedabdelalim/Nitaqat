@@ -1,4 +1,9 @@
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\aspect\LogUserAction.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\aspect\UserActivityAspect.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\config\CorsConfig.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\config\RedisConfig.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\config\RedisKeyExpirationListener.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\config\RedisListenerConfig.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\config\SecurityConfig.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\ActivitiesReportController.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\controller\ActivityController.java
@@ -23,7 +28,12 @@ D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\Activity.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\Profession.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\SaudizationPercentage.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\User.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\UserActivityDaily.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\UserActivityMonthly.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\UserActivitySummary.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\UserLog.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\exception\GlobalExceptionHandler.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\filter\ActivityTrackingFilter.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\i18n\YamlMessageSource.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\locale\LocalizationConfig.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\NitaqatApplication.java
@@ -32,6 +42,10 @@ D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\ActivityReposito
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\ProfessionReportRepository.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\ProfessionsRepository.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\SaudizationPercentageRespository.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserActivityDailyRepository.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserActivityMonthlyRepository.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserActivitySummaryRepository.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserLogRepository.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserRepository.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\CustomUserDetailsService.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\JwtAuthFilter.java
@@ -39,4 +53,5 @@ D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\JwtUtils.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\ActivityService.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\EmailService.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\ExcelImportService.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\RedisSessionService.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\service\UserService.java

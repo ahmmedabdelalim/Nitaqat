@@ -1,5 +1,6 @@
 package com.nitaqat.nitaqat.config;
 
+import com.nitaqat.nitaqat.filter.ActivityTrackingFilter;
 import com.nitaqat.nitaqat.security.JwtAuthFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,7 @@ public class SecurityConfig {
     // ✅ Password encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(10);
     }
 
     // ✅ Custom unauthorized response
@@ -39,7 +40,7 @@ public class SecurityConfig {
     // ✅ Main API security configuration
     @Bean
     @Order(1)
-    public SecurityFilterChain apiSecurity(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
+    public SecurityFilterChain apiSecurity(HttpSecurity http, JwtAuthFilter jwtAuthFilter , ActivityTrackingFilter activityTrackingFilter) throws Exception {
         System.out.println("API Security Filter Chain applied for /api/**"); // Debug log
 
         http
@@ -61,7 +62,8 @@ public class SecurityConfig {
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
                 // ✅ Injected filter bean (not new object)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(activityTrackingFilter,JwtAuthFilter.class);
 
         return http.build();
     }

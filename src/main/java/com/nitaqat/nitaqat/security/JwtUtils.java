@@ -78,4 +78,18 @@ public class JwtUtils {
         }
         return false;
     }
+
+    public String getJtiFromToken(String token) {
+        try {
+            Jws<Claims> jws = Jwts.parserBuilder()
+                    .setSigningKey(jwtSecret.getBytes())
+                    .build()
+                    .parseClaimsJws(token);
+
+            Claims claims = jws.getBody();
+            return claims.getId(); // jti
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

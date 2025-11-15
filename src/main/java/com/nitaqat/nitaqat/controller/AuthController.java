@@ -5,6 +5,7 @@ import com.nitaqat.nitaqat.dto.LoginRequest;
 import com.nitaqat.nitaqat.dto.SignupRequest;
 import com.nitaqat.nitaqat.entity.User;
 import com.nitaqat.nitaqat.security.JwtUtils;
+import com.nitaqat.nitaqat.service.RedisSessionService;
 import com.nitaqat.nitaqat.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -16,15 +17,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import com.nitaqat.nitaqat.dto.ApiResponse;
+import com.nitaqat.nitaqat.aspect.LogUserAction;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.context.MessageSource;
 import java.util.Locale;
-
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-
-
 
 @RestController
 public class AuthController {
@@ -39,6 +39,11 @@ public class AuthController {
     @Autowired
     private MessageSource messageSource;
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+    private final RedisSessionService redisSessionService;
+
+    public AuthController(RedisSessionService redisSessionService) {
+        this.redisSessionService = redisSessionService;
+    }
 
 
     @PostMapping(value = "/api/auth/signup", produces = "application/json; charset=UTF-8")
@@ -78,34 +83,48 @@ public class AuthController {
     }
 
 
+    @LogUserAction(action = "Login")
     @PostMapping("/api/auth/login")
-    public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest loginRequest , BindingResult bindingResult) {
-        if(bindingResult.hasErrors())
-        {
+    public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldError().getDefaultMessage();
-            return  ResponseEntity.badRequest().body(new ApiResponse(false, errorMessage , 400));
+            return ResponseEntity.badRequest().body(new ApiResponse(false, errorMessage, 400));
         }
+
         try {
+            Optional<User> user = userService.findByEmail(loginRequest.getEmail());
 
-                Optional<User> user = userService.findByEmail(loginRequest.getEmail()) ;
+            if (user.isEmpty() || !passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
+                return ResponseEntity.status(400).body(new ApiResponse(false, "Invalid email or password", 400));
+            }
 
-                if (user.isEmpty() || !passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
-                    return ResponseEntity.status(400).body(new ApiResponse(false, "Invalid email or password", 400));
-                }
+            if (!user.get().isActive()) {
+                return ResponseEntity.status(400).body(new ApiResponse(false, "User not active", 400, null, "pending"));
+            }
 
-                if (!user.get().isActive()) {
-                    return ResponseEntity.status(400).body(new ApiResponse(false, "User not active", 400, null , "pending"));
-                }
+            String token = jwtUtils.generateJwtToken(user.get().getEmail(), user.get().getId());
 
-                String token = jwtUtils.generateJwtToken(user.get().getEmail() , user.get().getId());
+            // ✅ Create session object
+            RedisSessionService.ActiveSession session = new RedisSessionService.ActiveSession();
+            session.setUserId(user.get().getId());
+            session.setUsername(user.get().getName());
+            session.setLoginAt(LocalDateTime.now());
+            session.setLastActivityAt(LocalDateTime.now());
 
+            // ✅ Redis key
+            String redisKey = "USER_SESSION_" + user.get().getId();
 
-                return ResponseEntity.ok(new ApiResponse(true, "Login successful", 200, token , "active"));
+            // ✅ Save session in Redis
+            redisSessionService.saveSession(redisKey, session);
+
+            return ResponseEntity.ok(new ApiResponse(true, "Login successful", 200, token, "active"));
+
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ApiResponse(false, "Login failed: " + e.getMessage(), 500));
         }
     }
 
+    @LogUserAction(action = "Authorize")
     @PostMapping("/api/auth/authorize")
     public ResponseEntity<ApiResponse> checkAuthorization(@RequestBody AuthorizationRequest request
     , HttpServletRequest httpServletRequest) {

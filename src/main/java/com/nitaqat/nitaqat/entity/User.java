@@ -62,6 +62,10 @@ public class User {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @CreationTimestamp
+    @Column(name = "updated_at", updatable = false)
+    private LocalDateTime updatedAt;
+
     public Long getId() {
         return id;
     }
