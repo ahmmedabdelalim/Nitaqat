@@ -42,7 +42,8 @@ public class Activity {
     @Column(name = "platinum")
     private Double platinum;
 
-
+    @OneToMany(mappedBy = "activity", fetch = FetchType.LAZY)
+    private List<Profession> professions;
 
 
     public Long getId() {

@@ -14,12 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.chrono.HijrahDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.chrono.HijrahDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 @Service
 public class ExcelImportService {
@@ -103,7 +99,7 @@ public class ExcelImportService {
         }
     }
 
-    public void importProfessionsFromExcel (MultipartFile file , Long userId , Long activityId) throws IOException
+    public void importProfessionsFromExcel (MultipartFile file , Long userId , Activity activityId) throws IOException
     {
         if (file == null || file.isEmpty()) {
             throw new RuntimeException("Uploaded file is empty or missing");
@@ -128,7 +124,7 @@ public class ExcelImportService {
                 Profession profession = new Profession();
 
                 profession.setUserId(userId);
-                profession.setActivityId(activityId);
+                profession.setActivity(activityId);
 
                 String employeeCode = getCellValue(row.getCell(0));
                 profession.setEmployeeCode(employeeCode.isEmpty() ? null : employeeCode);

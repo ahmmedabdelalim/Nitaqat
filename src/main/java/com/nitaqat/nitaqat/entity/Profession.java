@@ -16,8 +16,13 @@ public class Profession {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "activity_id")
-    private Long activityId;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @Column(name = "activity_id")
+//    private Long activityId;
+
+    @ManyToOne(fetch = FetchType.LAZY)  // Correct
+    @JoinColumn(name = "activity_id")   // Correct
+    private Activity activity;
 
     @Column(name = "employee_code")
     private String employeeCode;
@@ -60,13 +65,14 @@ public class Profession {
         this.userId = userId;
     }
 
-    public Long getActivityId() {
-        return activityId;
+    public Activity getActivity() {
+        return activity;
     }
 
-    public void setActivityId(Long activityId) {
-        this.activityId = activityId;
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
+
 
     public Long getId() {
         return id;

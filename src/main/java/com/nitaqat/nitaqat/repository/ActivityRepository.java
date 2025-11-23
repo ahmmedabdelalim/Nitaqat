@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
     void deleteByUserId(Long userId);
-
+    Optional<Activity> findById(Long Id);
     List<Activity> findByUserId(Long userId);
 
 

@@ -2,13 +2,12 @@ package com.nitaqat.nitaqat.controller;
 
 import com.nitaqat.nitaqat.aspect.LogUserAction;
 import com.nitaqat.nitaqat.dto.ApiResponse;
-import com.nitaqat.nitaqat.dto.AuthorizationRequest;
+import com.nitaqat.nitaqat.entity.Activity;
 import com.nitaqat.nitaqat.security.JwtUtils;
 import com.nitaqat.nitaqat.service.ActivityService;
 import com.nitaqat.nitaqat.service.ExcelImportService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +35,7 @@ public class ImportController {
     @PostMapping("/api/import")
     public ResponseEntity<ApiResponse> importExcel(
             @RequestParam("type") String type,
-            @RequestParam(value = "activityId", required = false) Long activityId, // ✅ Optional parameter
+            @RequestParam(value = "activityId", required = false) Activity activityId, // ✅ Optional parameter
             @RequestParam("file") MultipartFile file,
             Locale locale,
             HttpServletRequest httpServletRequest
