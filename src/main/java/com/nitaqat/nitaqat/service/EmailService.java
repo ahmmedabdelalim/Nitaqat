@@ -19,4 +19,13 @@ public class EmailService {
         message.setText("A new user signed up with name " + name+ " and email in NITAQAT : " + email);
         mailSender.send(message);
     }
+
+    public void sendOtpEmail(String email, String otp) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Your OTP Code");
+        message.setText("Your OTP for login is: " + otp + "\nIt expires in 5 minutes.");
+
+        mailSender.send(message);
+    }
 }

@@ -71,4 +71,10 @@ public class UserService {
         }
     }
 
+    // 🔹 Used to update OTP, password, or any change in user
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+
 }

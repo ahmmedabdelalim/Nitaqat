@@ -3,6 +3,7 @@ package com.nitaqat.nitaqat.controller;
 import com.nitaqat.nitaqat.dto.*;
 import com.nitaqat.nitaqat.entity.User;
 import com.nitaqat.nitaqat.security.JwtUtils;
+import com.nitaqat.nitaqat.service.EmailService;
 import com.nitaqat.nitaqat.service.RedisSessionService;
 import com.nitaqat.nitaqat.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +30,9 @@ import org.slf4j.Logger;
 public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -82,7 +86,7 @@ public class AuthController {
     }
 
 
-    @LogUserAction(action = "Login")
+    @LogUserAction(action = "Login OTP Request")
     @PostMapping("/api/auth/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -91,37 +95,79 @@ public class AuthController {
         }
 
         try {
-            Optional<User> user = userService.findByEmail(loginRequest.getEmail());
-
-            if (user.isEmpty() || !passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
+            Optional<User> optionalUser = userService.findByEmail(loginRequest.getEmail());
+            if (optionalUser.isEmpty() || !passwordEncoder.matches(loginRequest.getPassword(), optionalUser.get().getPassword())) {
                 return ResponseEntity.status(400).body(new ApiResponse(false, "Invalid email or password", 400));
             }
 
-            if (!user.get().isActive()) {
+            User user = optionalUser.get();
+
+            if (!user.isActive()) {
                 return ResponseEntity.status(400).body(new ApiResponse(false, "User not active", 400, null, "pending"));
             }
 
-            String token = jwtUtils.generateJwtToken(user.get().getEmail(), user.get().getId());
+            // 🔹 Generate OTP (6 digits)
+            String otp = String.valueOf((int) (Math.random() * 900000) + 100000);
+            user.setOtpCode(otp);
+            user.setOtpExpiresAt(LocalDateTime.now().plusMinutes(5));
+            user.setOtpVerified(false);
 
-            // ✅ Create session object
-            RedisSessionService.ActiveSession session = new RedisSessionService.ActiveSession();
-            session.setUserId(user.get().getId());
-            session.setUsername(user.get().getName());
-            session.setLoginAt(LocalDateTime.now());
-            session.setLastActivityAt(LocalDateTime.now());
+            userService.save(user);  // update user with otp
 
-            // ✅ Redis key
-            String redisKey = "USER_SESSION_" + user.get().getId();
+            // 🔹 Send OTP via email
+            emailService.sendOtpEmail(user.getEmail(), otp);
 
-            // ✅ Save session in Redis
-            redisSessionService.saveSession(redisKey, session);
-
-            return ResponseEntity.ok(new ApiResponse(true, "Login successful", 200, token, "active"));
+            return ResponseEntity.ok(new ApiResponse(true, "OTP sent to email", 200, null, "otp_sent"));
 
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ApiResponse(false, "Login failed: " + e.getMessage(), 500));
         }
     }
+
+    @LogUserAction(action = "Verify OTP")
+    @PostMapping("/api/auth/verify-otp")
+    public ResponseEntity<ApiResponse> verifyOtp(@RequestBody VerifyOtpRequest request) {
+
+        Optional<User> optionalUser = userService.findByEmail(request.getEmail());
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(400).body(new ApiResponse(false, "User not found", 400));
+        }
+
+        User user = optionalUser.get();
+
+        // ❌ OTP invalid
+        if (!request.getOtp().equals(user.getOtpCode())) {
+            return ResponseEntity.status(400).body(new ApiResponse(false, "Invalid OTP", 400));
+        }
+
+        // ❌ OTP expired
+        if (user.getOtpExpiresAt().isBefore(LocalDateTime.now())) {
+            return ResponseEntity.status(400).body(new ApiResponse(false, "OTP expired", 400));
+        }
+
+        // 🔹 OTP verified
+        user.setOtpVerified(true);
+        user.setOtpCode(null);
+        user.setOtpExpiresAt(null);
+        userService.save(user);
+
+        // 🔹 Generate JWT
+        String token = jwtUtils.generateJwtToken(user.getEmail(), user.getId());
+
+        // 🔹 Create session in Redis
+        RedisSessionService.ActiveSession session = new RedisSessionService.ActiveSession();
+        session.setUserId(user.getId());
+        session.setUsername(user.getName());
+        session.setLoginAt(LocalDateTime.now());
+        session.setLastActivityAt(LocalDateTime.now());
+
+        String redisKey = "USER_SESSION_" + user.getId();
+        redisSessionService.saveSession(redisKey, session);
+
+        return ResponseEntity.ok(new ApiResponse(true, "OTP Verified and Login successful", 200, token, "active"));
+    }
+
+
 
     @LogUserAction(action = "Authorize")
     @PostMapping("/api/auth/authorize")

@@ -68,6 +68,37 @@ public class User {
     @Column(name = "updated_at", updatable = false)
     private LocalDateTime updatedAt;
 
+    // 🔹 New columns for OTP
+    private String otpCode;
+
+    private LocalDateTime otpExpiresAt;
+
+    private boolean otpVerified = false;
+
+    public String getOtpCode() {
+        return otpCode;
+    }
+
+    public void setOtpCode(String otpCode) {
+        this.otpCode = otpCode;
+    }
+
+    public LocalDateTime getOtpExpiresAt() {
+        return otpExpiresAt;
+    }
+
+    public void setOtpExpiresAt(LocalDateTime otpExpiresAt) {
+        this.otpExpiresAt = otpExpiresAt;
+    }
+
+    public boolean isOtpVerified() {
+        return otpVerified;
+    }
+
+    public void setOtpVerified(boolean otpVerified) {
+        this.otpVerified = otpVerified;
+    }
+
     public Long getId() {
         return id;
     }
