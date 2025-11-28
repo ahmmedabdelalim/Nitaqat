@@ -3,8 +3,10 @@ package com.nitaqat.nitaqat.service;
 
 import com.nitaqat.nitaqat.entity.Activity;
 import com.nitaqat.nitaqat.entity.Profession;
+import com.nitaqat.nitaqat.entity.SaudizationPercentage;
 import com.nitaqat.nitaqat.repository.ActivityRepository;
 import com.nitaqat.nitaqat.repository.ProfessionsRepository;
+import com.nitaqat.nitaqat.repository.SaudizationPercentageRespository;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -24,6 +26,9 @@ public class ExportService {
 
     @Autowired
     private ProfessionsRepository professionRepository;
+
+    @Autowired
+    private SaudizationPercentageRespository saudizationPercentageRespository;
 
     public ByteArrayInputStream exportUserData(Long userId) throws IOException {
 
@@ -101,6 +106,43 @@ public class ExportService {
         // ============================================
         // WRITE TO OUTPUT STREAM
         // ============================================
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        workbook.write(out);
+        workbook.close();
+
+        return new ByteArrayInputStream(out.toByteArray());
+    }
+
+    public ByteArrayInputStream exportSaudizationPercentage() throws IOException
+    {
+        List <SaudizationPercentage> saudizationPercentages = saudizationPercentageRespository.findAll();
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        XSSFSheet sheet1 = workbook.createSheet("Activities");
+
+        Row header1 = sheet1.createRow(0);
+//        header1.createCell(0).setCellValue("ID");
+        header1.createCell(0).setCellValue("Job");
+        header1.createCell(1).setCellValue("Job Ar");
+        header1.createCell(2).setCellValue("Job En");
+        header1.createCell(3).setCellValue("saudization Catageory");
+        header1.createCell(4).setCellValue("saudization Catageory Ar");
+        header1.createCell(5).setCellValue("saudization Percentage");
+        header1.createCell(6).setCellValue("emp Threshold");
+
+        int r1 = 1;
+        for (SaudizationPercentage a : saudizationPercentages) {
+            Row row = sheet1.createRow(r1++);
+
+            row.createCell(0).setCellValue(a.getJob());
+            row.createCell(1).setCellValue(a.getJobAr());
+            row.createCell(2).setCellValue(a.getJobEn());
+            row.createCell(3).setCellValue(a.getSaudizationCatageory());
+            row.createCell(4).setCellValue(a.getSaudizationCatageoryAr());
+            row.createCell(5).setCellValue(a.getSaudizationPercentage()!= null ? a.getSaudizationPercentage() : 0);
+            row.createCell(6).setCellValue(a.getEmpThreshold()!= null ? a.getEmpThreshold() : 0);
+        }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         workbook.write(out);
         workbook.close();

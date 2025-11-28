@@ -27,6 +27,7 @@ D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\ProfessionReportDTO.jav
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\ReportApiResponse.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\SignupRequest.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\uploadListApiResponse.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\VerifyOtpRequest.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\Activity.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\Profession.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\entity\SaudizationPercentage.java

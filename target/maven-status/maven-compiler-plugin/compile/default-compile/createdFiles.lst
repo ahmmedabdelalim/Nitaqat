@@ -39,6 +39,7 @@ com\nitaqat\nitaqat\dto\ActivityHierarchyDTO.class
 com\nitaqat\nitaqat\security\CustomUserDetailsService.class
 com\nitaqat\nitaqat\security\JwtAuthFilter.class
 com\nitaqat\nitaqat\service\RedisSessionService$ActiveSession.class
+com\nitaqat\nitaqat\dto\VerifyOtpRequest.class
 com\nitaqat\nitaqat\service\UserService.class
 com\nitaqat\nitaqat\config\RedisKeyExpirationListener.class
 com\nitaqat\nitaqat\aspect\UserActivityAspect.class

@@ -167,6 +167,34 @@ public class AuthController {
         return ResponseEntity.ok(new ApiResponse(true, "OTP Verified and Login successful", 200, token, "active"));
     }
 
+    @LogUserAction(action = "Resend OTP")
+    @PostMapping("/api/auth/resend-otp")
+    public ResponseEntity<ApiResponse> resendOtp(@RequestBody ResendOtpRequest request) {
+
+        Optional<User> optionalUser = userService.findByEmail(request.getEmail());
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(400).body(new ApiResponse(false, "User not found", 400));
+        }
+
+        User user = optionalUser.get();
+
+        // 🔹 Check if user already verified
+//        if (user.isOtpVerified()) {
+//            return ResponseEntity.ok(new ApiResponse(false, "OTP already verified. Login normally.", 400));
+//        }
+
+        // 🔹 Generate new OTP
+        String otp = String.valueOf((int) (Math.random() * 900000) + 100000);
+        user.setOtpCode(otp);
+        user.setOtpExpiresAt(LocalDateTime.now().plusMinutes(5));
+        userService.save(user);  // update user with new OTP
+
+        // 🔹 Send email
+        emailService.sendOtpEmail(user.getEmail(), otp);
+
+        return ResponseEntity.ok(new ApiResponse(true, "New OTP sent successfully", 200, null, "otp_sent"));
+    }
+
 
 
     @LogUserAction(action = "Authorize")

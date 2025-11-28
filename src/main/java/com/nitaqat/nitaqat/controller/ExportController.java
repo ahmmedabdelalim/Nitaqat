@@ -56,4 +56,36 @@ public class ExportController {
                     .body(new ApiResponse(false, "Unauthorized access", 401));
         }
     }
+
+    @LogUserAction(action = "Export Saudization Percentage")
+    @GetMapping("/export-saudization-percentage")
+    public ResponseEntity<?> export_saudization_percentage(HttpServletRequest request) {
+
+        String header = request.getHeader("Authorization");
+        if (header == null || !header.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse(false, "Missing token", 401));
+        }
+
+        String token = header.substring(7); // 🔹 remove "Bearer "
+
+        try
+        {
+            if (!jwtUtils.validateJwtToken(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new ApiResponse(false, "Invalid or expired token", 401));
+            }
+            ByteArrayInputStream excel = exportService.exportSaudizationPercentage();
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "attachment; filename=Saudization Percentage.xlsx")
+                    .body(excel.readAllBytes());
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }

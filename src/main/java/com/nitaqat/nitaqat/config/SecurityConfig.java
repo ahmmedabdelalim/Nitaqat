@@ -52,10 +52,12 @@ public class SecurityConfig {
                                 "api/**",
                                 "/api/auth/**",
                                 "/api/export/**",
+//                                "/api/export-saudization-percentage",
                                 "/api/import",
                                 "/api/import/**",
                                 "/api/profession-report",
                                 "/api/profession-report/**"
+
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
