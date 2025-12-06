@@ -25,6 +25,7 @@ D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\AuthorizationRequest.ja
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\LoginRequest.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\ProfessionReportDTO.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\ReportApiResponse.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\ResendOtpRequest.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\SignupRequest.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\uploadListApiResponse.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\dto\VerifyOtpRequest.java
@@ -51,6 +52,7 @@ D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserActivityMont
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserActivitySummaryRepository.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserLogRepository.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\repository\UserRepository.java
+D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\CustomUserDetails.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\CustomUserDetailsService.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\JwtAuthFilter.java
 D:\NITAQAT\nitaqat\src\main\java\com\nitaqat\nitaqat\security\JwtUtils.java

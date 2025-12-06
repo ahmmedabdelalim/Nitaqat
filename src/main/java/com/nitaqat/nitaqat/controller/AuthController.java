@@ -86,8 +86,8 @@ public class AuthController {
     }
 
 
-    @LogUserAction(action = "Login OTP Request")
     @PostMapping("/api/auth/login")
+    @LogUserAction(action = "Login OTP Request")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldError().getDefaultMessage();
@@ -122,7 +122,9 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ApiResponse(false, "Login failed: " + e.getMessage(), 500));
         }
+
     }
+
 
     @LogUserAction(action = "Verify OTP")
     @PostMapping("/api/auth/verify-otp")
@@ -201,7 +203,13 @@ public class AuthController {
     @PostMapping("/api/auth/authorize")
     public ResponseEntity<ApiResponse> checkAuthorization(@RequestBody AuthorizationRequest request
     , HttpServletRequest httpServletRequest) {
-        Locale locale = new Locale(request.getLang());
+        // Get lang from header
+        String lang = httpServletRequest.getHeader("lang");
+        if (lang == null || lang.isEmpty()) {
+            lang = "en"; // fallback default
+        }
+
+        Locale locale = new Locale(lang);
 
         // Localize page name from messages_xx.yml
         String localizedPageName = messageSource.getMessage(

@@ -57,6 +57,7 @@ com\nitaqat\nitaqat\service\EmailService.class
 com\nitaqat\nitaqat\dto\uploadListApiResponse.class
 com\nitaqat\nitaqat\entity\SaudizationPercentage.class
 com\nitaqat\nitaqat\controller\web\DashboardController.class
+com\nitaqat\nitaqat\dto\ResendOtpRequest.class
 com\nitaqat\nitaqat\entity\UserLog.class
 com\nitaqat\nitaqat\entity\UserActivityDaily.class
 com\nitaqat\nitaqat\service\ResetService.class
@@ -64,3 +65,4 @@ com\nitaqat\nitaqat\dto\SignupRequest.class
 com\nitaqat\nitaqat\locale\LocalizationConfig.class
 com\nitaqat\nitaqat\controller\ImportController.class
 com\nitaqat\nitaqat\controller\ExportController.class
+com\nitaqat\nitaqat\security\CustomUserDetails.class

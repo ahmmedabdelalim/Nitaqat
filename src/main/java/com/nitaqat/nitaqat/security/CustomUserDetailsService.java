@@ -17,17 +17,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
-        // ✅ Only allow admin users
-        if (!"admin".equalsIgnoreCase(user.getRole())) {
-            throw new UsernameNotFoundException("Only admin users can log in");
-        }
+        // Only allow admin users
+//        if (!"admin".equalsIgnoreCase(user.getRole())) {
+//            throw new UsernameNotFoundException("Only admin users can log in");
+//        }
 
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                .roles(user.getRole()) // you can still keep role = admin
-                .build();
+        // ⚠️ CRITICAL CHANGE: Return CustomUserDetails instead of generic Spring User
+        return new CustomUserDetails(user);
     }
 }

@@ -3,6 +3,7 @@ package com.nitaqat.nitaqat.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -90,6 +91,29 @@ public class JwtUtils {
             return claims.getId(); // jti
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    public boolean validateJwtToken(String token, UserDetails userDetails) {
+        try {
+            final String email = getEmailFromJwtToken(token);
+
+            // 1. Check if the token's email matches the user details' email
+            // 2. Check token validity (signature and expiry)
+            return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        } catch (ExpiredJwtException e) {
+            // The isTokenExpired check handles this, but catch here just in case.
+            return false;
+        }
+    }
+
+    // New helper method to check only expiration (used by the new validate method)
+    private boolean isTokenExpired(String token) {
+        try {
+            return extractAllClaims(token).getExpiration().before(new Date());
+        } catch (ExpiredJwtException e) {
+            // If extracting claims throws ExpiredJwtException, the token is certainly expired.
+            return true;
         }
     }
 }
