@@ -109,7 +109,7 @@ public class AuthController {
             // 🔹 Generate OTP (6 digits)
             String otp = String.valueOf((int) (Math.random() * 900000) + 100000);
             user.setOtpCode(otp);
-            user.setOtpExpiresAt(LocalDateTime.now().plusMinutes(5));
+            user.setOtpExpiresAt(LocalDateTime.now().plusMinutes(2));
             user.setOtpVerified(false);
 
             userService.save(user);  // update user with otp

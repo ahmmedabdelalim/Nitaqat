@@ -70,7 +70,7 @@ public class ActivitiesReportRepository {
                          a.platinum  AS Platinum
                      FROM activities a
                      LEFT JOIN professions p
-                         ON p.company_code = a.company_code
+                         ON p.activity_id = a.id
                          
                      %s
                      GROUP BY
@@ -155,7 +155,7 @@ public class ActivitiesReportRepository {
                          a.platinum  AS Platinum
                      FROM activities a
                      LEFT JOIN professions p
-                         ON p.company_code = a.company_code
+                         ON p.activity_id = a.id
                          
                      %s
                      GROUP BY
@@ -204,6 +204,7 @@ public class ActivitiesReportRepository {
             WITH normalized AS (
                 SELECT 
                     a.company_code,
+                    p.activity_id as activity_id,
                     CASE 
                         WHEN p.nationality LIKE 'سعودي%' THEN 'سعودي'
                         ELSE p.nationality
@@ -211,7 +212,7 @@ public class ActivitiesReportRepository {
                     p.id
                 FROM activities a
                 LEFT JOIN professions p
-                    ON p.company_code = a.company_code
+                    ON p.activity_id = a.id
                 %s
             )
             SELECT
@@ -221,7 +222,7 @@ public class ActivitiesReportRepository {
                 
                 ROUND(
                     (COUNT(n.id) * 100.0) /
-                    NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2
+                    NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id), 0), 2
                 ) AS percentage,
                 
                 CASE  
@@ -229,25 +230,25 @@ public class ActivitiesReportRepository {
                          THEN 'ملتزم'
                     WHEN n.nationality IN ('هندي', 'بنغالي')
                          AND ROUND((COUNT(n.id) * 100.0) /
-                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 40
+                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id), 0), 2) > 40
                          THEN 'مخالف (تجاوز 40%)'
                     WHEN n.nationality = 'يمني'
                          AND ROUND((COUNT(n.id) * 100.0) /
-                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 25
+                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id), 0), 2) > 25
                          THEN 'مخالف (تجاوز 25%)'
                     WHEN n.nationality = 'أثيوبي'
                          AND ROUND((COUNT(n.id) * 100.0) /
-                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 1
+                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id), 0), 2) > 1
                          THEN 'مخالف (تجاوز 1%)'
-                    WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code)) <= 19
+                    WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id)) <= 19
                          THEN 'مسموح (عدد موظفين ≤ 19)'
-                    WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code)) BETWEEN 20 AND 49
+                    WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id)) BETWEEN 20 AND 49
                          AND ROUND((COUNT(n.id) * 100.0) /
-                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 70
+                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id), 0), 2) > 70
                          THEN 'مخالف (تجاوز 70%)'
-                    WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code)) >= 50
+                    WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id)) >= 50
                          AND ROUND((COUNT(n.id) * 100.0) /
-                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 40
+                                   NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id), 0), 2) > 40
                          THEN 'مخالف (تجاوز 40%)'
                     ELSE 'ملتزم'
                 END AS status,
@@ -259,23 +260,23 @@ public class ActivitiesReportRepository {
                         CASE
                             WHEN n.nationality IN ('هندي', 'بنغالي')
                                  AND ROUND((COUNT(n.id) * 100.0) /
-                                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 40
+                                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id), 0), 2) > 40
                                  THEN 1
                             WHEN n.nationality = 'يمني'
                                  AND ROUND((COUNT(n.id) * 100.0) /
-                                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 25
+                                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id), 0), 2) > 25
                                  THEN 1
                             WHEN n.nationality = 'أثيوبي'
                                  AND ROUND((COUNT(n.id) * 100.0) /
-                                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 1
+                                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id), 0), 2) > 1
                                  THEN 1
-                            WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code)) BETWEEN 20 AND 49
+                            WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id)) BETWEEN 20 AND 49
                                  AND ROUND((COUNT(n.id) * 100.0) /
-                                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 70
+                                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id), 0), 2) > 70
                                  THEN 1
-                            WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code)) >= 50
+                            WHEN (SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id)) >= 50
                                  AND ROUND((COUNT(n.id) * 100.0) /
-                                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.company_code), 0), 2) > 40
+                                           NULLIF(SUM(COUNT(n.id)) OVER (PARTITION BY n.activity_id), 0), 2) > 40
                                  THEN 1
                             ELSE 0
                         END
@@ -284,7 +285,7 @@ public class ActivitiesReportRepository {
                 END AS status_color
                 
             FROM normalized n
-            GROUP BY n.company_code, n.nationality
+            GROUP BY n.activity_id, n.nationality
             ORDER BY total_by_nationality DESC;
         """.replace("%s", condition);
 

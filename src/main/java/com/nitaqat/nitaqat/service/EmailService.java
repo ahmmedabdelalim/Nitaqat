@@ -23,8 +23,8 @@ public class EmailService {
     public void sendOtpEmail(String email, String otp) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
-        message.setSubject("Your OTP Code");
-        message.setText("Your OTP for login is: " + otp + "\nIt expires in 5 minutes.");
+        message.setSubject("NITAQAT OTP Code ");
+        message.setText("NITAQAT OTP Code for login is: " + otp + "\nIt expires in 5 minutes.");
 
         mailSender.send(message);
     }
