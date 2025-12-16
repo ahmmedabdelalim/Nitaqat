@@ -40,7 +40,6 @@ public class ProfessionReportController {
 
         String token = header.substring(7);
         Long userId = jwtUtils.extractUserId(token);
-
         List<ProfessionReportDTO> report = reportRepository.getProfessionReport(activityId , userId);
 
         ReportApiResponse<List<ProfessionReportDTO>> response =

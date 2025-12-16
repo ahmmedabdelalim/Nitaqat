@@ -6,6 +6,9 @@ import com.nitaqat.nitaqat.dto.ProfessionReportDTO;
 import com.nitaqat.nitaqat.dto.ReportApiResponse;
 import com.nitaqat.nitaqat.repository.ActivitiesReportRepository;
 import com.nitaqat.nitaqat.repository.ProfessionReportRepository;
+import com.nitaqat.nitaqat.security.JwtUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +24,8 @@ public class CalculationController {
     private final ActivitiesReportRepository activitiesReportRepository;
 
     private final ProfessionReportRepository reportRepository;
+    @Autowired
+    private JwtUtils jwtUtils;
 
 
     public CalculationController(ActivitiesReportRepository activitiesReportRepository, ProfessionReportRepository reportRepository) {
@@ -44,10 +49,16 @@ public class CalculationController {
 
     @GetMapping("/api/get-profession-for-activity")
     public ResponseEntity<ReportApiResponse<List<ProfessionReportDTO>>> getProfessionForActivity(
-            @RequestParam(required = false) Long activityId
+            @RequestParam(required = false) Long activityId,
+            HttpServletRequest httpServletRequest
     ) {
 
-        List<ProfessionReportDTO> report = reportRepository.getProfession(activityId);
+        // ✅ Extract user ID from JWT
+        String header = httpServletRequest.getHeader("Authorization");
+
+        String token = header.substring(7);
+        Long userId = jwtUtils.extractUserId(token);
+        List<ProfessionReportDTO> report = reportRepository.getProfession(activityId , userId);
 
         ReportApiResponse<List<ProfessionReportDTO>> response =
                 new ReportApiResponse<>(true, "Professions fetched successfully", HttpStatus.OK.value(), report);
@@ -60,10 +71,16 @@ public class CalculationController {
     @GetMapping("/api/get-profession")
     public ResponseEntity<ReportApiResponse<List<ProfessionReportDTO>>> getProfession(
             @RequestParam(required = false) Long activityId,
-            @RequestParam (required = false) Long professionId
-    ) {
+            @RequestParam (required = false) Long professionId,
+            HttpServletRequest httpServletRequest
 
-        List<ProfessionReportDTO> report = reportRepository.getProfession(activityId);
+    ) {
+        // ✅ Extract user ID from JWT
+        String header = httpServletRequest.getHeader("Authorization");
+
+        String token = header.substring(7);
+        Long userId = jwtUtils.extractUserId(token);
+        List<ProfessionReportDTO> report = reportRepository.getProfession(activityId , userId);
 
         // If professionId is provided, filter in memory
         if (professionId != null) {
