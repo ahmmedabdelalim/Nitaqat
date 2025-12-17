@@ -35,8 +35,8 @@ public class ProfessionReportRepository {
         String sql = """
             SELECT 
                 p.id AS profession_id,
-                p.company_code,
                 a.name AS company_name,
+                p.company_code,
                 sp.saudization_catageory,
                 sp.saudization_catageory_ar,
                 sp.emp_threshold,
@@ -66,7 +66,9 @@ public class ProfessionReportRepository {
             JOIN activities a 
                 ON p.activity_id = a.id
             %s
-            GROUP BY 
+            GROUP BY
+                p.id,
+                p.company_code,
                 a.name,
                 sp.saudization_catageory,
                 sp.saudization_percentage,
@@ -94,7 +96,10 @@ public class ProfessionReportRepository {
                 )
         );
     }
-// get profession for activity
+
+
+
+// get profession for activity for calculation
 
     public List<ProfessionReportDTO> getProfessionForActivity(Long activityId , Long userId) {
 
@@ -109,8 +114,8 @@ public class ProfessionReportRepository {
 
 
         String sql = """
-            SELECT 
-                p.id AS profession_id,
+            SELECT
+                MIN(p.id) AS id,
                 p.company_code,
                 a.name AS company_name,
                 sp.saudization_catageory,
@@ -143,7 +148,7 @@ public class ProfessionReportRepository {
                 ON p.activity_id = a.id
             %s
             GROUP BY 
-               
+          
                 p.company_code,
                 a.name,
                 sp.saudization_catageory,
@@ -158,7 +163,7 @@ public class ProfessionReportRepository {
         return jdbcTemplate.query(sql,
                 (rs, rowNum) ->
                         new ProfessionReportDTO(
-                                rs.getInt("profession_id"),
+                                rs.getInt("id"),
                                 rs.getString("company_code"),
                                 rs.getString("company_name"),
                                 rs.getString("saudization_catageory"),
@@ -185,7 +190,7 @@ public class ProfessionReportRepository {
 
         String sql = """
             SELECT 
-                p.id AS profession_id,
+                MIN(p.id) AS id, 
                 p.company_code,
                 a.name AS company_name,
                 sp.saudization_catageory,
@@ -218,7 +223,7 @@ public class ProfessionReportRepository {
                 ON p.activity_id = a.id
             %s
             GROUP BY 
-               
+                
                 p.company_code,
                 a.name,
                 sp.saudization_catageory,
@@ -233,7 +238,7 @@ public class ProfessionReportRepository {
         return jdbcTemplate.query(sql,
                 (rs, rowNum) ->
                         new ProfessionReportDTO(
-                                rs.getInt("profession_id"),
+                                rs.getInt("id"),
                                 rs.getString("company_code"),
                                 rs.getString("company_name"),
                                 rs.getString("saudization_catageory"),
