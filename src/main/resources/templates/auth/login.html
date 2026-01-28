@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login | NITAQAT</title>
+    <link rel="stylesheet" href="/css/signup.css" />
+    <link rel="icon" type="image/jpeg" href="/images/logo.jpeg" />
+
+
+</head>
+<body>
+<div class="signup-container">
+    <!-- Logo & Title -->
+    <img src="/images/logo.jpeg" alt="NITAQAT Logo" class="logo" />
+    <h1 class="title">NITAQAT</h1>
+    <p class="subtitle">Welcome back! Log in to your account.</p>
+
+    <!-- OAuth Buttons (optional) -->
+    <div class="signup-buttons">
+        <a class="btn google-btn" href="/oauth2/authorization/google">
+            <span class="icon google-icon"></span>
+            Login with Google
+        </a>
+
+        <button class="btn microsoft-btn">
+            <span class="icon microsoft-icon"></span>
+            Login with Microsoft
+        </button>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"><span>OR</span></div>
+
+    <!-- Email Login Form (JS-based) -->
+    <form class="form" method="post" action="/login">
+        <label for="email" class="input-label">Email</label>
+        <input type="email" name="username" placeholder="Enter your email" required class="input-field" />
+
+        <label for="password" class="input-label">Password</label>
+        <input type="password" name="password" placeholder="Enter your password" required class="input-field" />
+
+        <button type="submit" class="btn email-btn">
+            <span class="icon email-icon"></span>
+            Login with Email
+        </button>
+
+        <!-- Error message -->
+<!--        <div style="color:red; margin-top:10px;">-->
+<!--            <span th:if="${param.error}" th:text="'Invalid email or password.'"></span>-->
+<!--        </div>-->
+    </form>
+    <!-- Add this below the form -->
+
+    <div style="color:red;">
+        <script>
+            if (window.location.search.includes("error=true")) {
+                document.write("Invalid email or password.");
+            }
+        </script>
+    </div>
+
+</div>
+
+</body>
+</html>

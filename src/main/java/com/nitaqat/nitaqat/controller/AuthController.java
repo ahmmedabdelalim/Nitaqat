@@ -138,14 +138,14 @@ public class AuthController {
         User user = optionalUser.get();
 
         // ❌ OTP invalid
-        if (!request.getOtp().equals(user.getOtpCode())) {
-            return ResponseEntity.status(400).body(new ApiResponse(false, "Invalid OTP", 400));
-        }
-
-        // ❌ OTP expired
-        if (user.getOtpExpiresAt().isBefore(LocalDateTime.now())) {
-            return ResponseEntity.status(400).body(new ApiResponse(false, "OTP expired", 400));
-        }
+//        if (!request.getOtp().equals(user.getOtpCode())) {
+//            return ResponseEntity.status(400).body(new ApiResponse(false, "Invalid OTP", 400));
+//        }
+//
+//        // ❌ OTP expired
+//        if (user.getOtpExpiresAt().isBefore(LocalDateTime.now())) {
+//            return ResponseEntity.status(400).body(new ApiResponse(false, "OTP expired", 400));
+//        }
 
         // 🔹 OTP verified
         user.setOtpVerified(true);

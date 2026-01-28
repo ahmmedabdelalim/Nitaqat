@@ -15,7 +15,7 @@ public class ResetService {
 
     public void resetUserData(Long userId) {
         // Delete safely (only rows with matching userId)
-        activityRepository.deleteByUserId(userId);
         professionRepository.deleteByUserId(userId);
+        activityRepository.deleteByUserId(userId);
     }
 }

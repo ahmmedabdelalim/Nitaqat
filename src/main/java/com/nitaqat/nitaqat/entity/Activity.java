@@ -2,7 +2,6 @@ package com.nitaqat.nitaqat.entity;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,7 +27,7 @@ public class Activity {
     private String companyCode;
 
     @Column(name = "percentage")
-    private Long percentage;
+    private Double percentage;
 
     @Column(name = "low_green")
     private Double lowGreen;
@@ -78,11 +77,11 @@ public class Activity {
         this.companyCode = companyCode;
     }
 
-    public Long getPercentage() {
+    public Double getPercentage() {
         return percentage;
     }
 
-    public void setPercentage(Long percentage) {
+    public void setPercentage(Double percentage) {
         this.percentage = percentage;
     }
 

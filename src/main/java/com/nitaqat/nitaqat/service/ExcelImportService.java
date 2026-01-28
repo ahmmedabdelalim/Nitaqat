@@ -66,25 +66,25 @@ public class ExcelImportService {
 
                 String percentageStr = getCellValue(row.getCell(2));
                 activity.setPercentage(
-                        (percentageStr == null || percentageStr.trim().isEmpty()) ? null : Long.parseLong(percentageStr.trim())
+                        (percentageStr == null || percentageStr.trim().isEmpty()) ? null : Double.parseDouble(percentageStr.trim())
                 );
 
-                String lowGreen = getCellValue(row.getCell(3));
+                String lowGreen = getCellValue(row.getCell(2));
                 activity.setLowGreen(
                         (lowGreen == null || lowGreen.trim().isEmpty()) ? null : Double.parseDouble(lowGreen.trim())
                 );
 
-                String middelGreen = getCellValue(row.getCell(4));
+                String middelGreen = getCellValue(row.getCell(3));
                 activity.setMiddelGreen(
                         (middelGreen == null || middelGreen.trim().isEmpty()) ? null : Double.parseDouble(middelGreen.trim())
                 );
 
-                String highGreen = getCellValue(row.getCell(5));
+                String highGreen = getCellValue(row.getCell(4));
                 activity.setHighGreen(
                         (highGreen == null || highGreen.trim().isEmpty()) ? null : Double.parseDouble(highGreen.trim())
                 );
 
-                String platinum = getCellValue(row.getCell(6));
+                String platinum = getCellValue(row.getCell(5));
                 activity.setPlatinum(
                         (platinum == null || platinum.trim().isEmpty()) ? null : Double.parseDouble(platinum.trim())
                 );
