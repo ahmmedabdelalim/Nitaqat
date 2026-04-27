@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.chrono.HijrahDate;
 import java.util.ArrayList;
@@ -98,6 +99,8 @@ public class ExcelImportService {
             }
         }
     }
+
+
 
     public void importProfessionsFromExcel (MultipartFile file , Long userId , Activity activityId) throws IOException
     {
@@ -257,7 +260,9 @@ public class ExcelImportService {
         if (cell == null) return "";
         return switch (cell.getCellType()) {
             case STRING -> cell.getStringCellValue().trim();
-            case NUMERIC -> String.valueOf((long) cell.getNumericCellValue());
+            case NUMERIC -> BigDecimal.valueOf(cell.getNumericCellValue())
+                    .stripTrailingZeros()
+                    .toPlainString();  // "75.5", "0.8", "100"
             case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
             default -> "";
         };
