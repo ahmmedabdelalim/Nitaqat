@@ -107,17 +107,27 @@ public class AuthController {
             }
 
             // 🔹 Generate OTP (6 digits)
-            String otp = String.valueOf((int) (Math.random() * 900000) + 100000);
-            user.setOtpCode(otp);
-            user.setOtpExpiresAt(LocalDateTime.now().plusMinutes(2));
-            user.setOtpVerified(false);
+//            String otp = String.valueOf((int) (Math.random() * 900000) + 100000);
+//            user.setOtpCode(otp);
+//            user.setOtpExpiresAt(LocalDateTime.now().plusMinutes(2));
+//            user.setOtpVerified(false);
+//            userService.save(user);  // update user with otp
+//            // 🔹 Send OTP via email
+//            emailService.sendOtpEmail(user.getEmail(), otp);
+//            return ResponseEntity.ok(new ApiResponse(true, "OTP sent to email", 200, null, "otp_sent"));
+            // 🔹 Generate JWT
+            String token = jwtUtils.generateJwtToken(user.getEmail(), user.getId());
+            // 🔹 Create session in Redis
+            RedisSessionService.ActiveSession session = new RedisSessionService.ActiveSession();
+            session.setUserId(user.getId());
+            session.setUsername(user.getName());
+            session.setLoginAt(LocalDateTime.now());
+            session.setLastActivityAt(LocalDateTime.now());
 
-            userService.save(user);  // update user with otp
+            String redisKey = "USER_SESSION_" + user.getId();
+            redisSessionService.saveSession(redisKey, session);
 
-            // 🔹 Send OTP via email
-            emailService.sendOtpEmail(user.getEmail(), otp);
-
-            return ResponseEntity.ok(new ApiResponse(true, "OTP sent to email", 200, null, "otp_sent"));
+            return ResponseEntity.ok(new ApiResponse(true, "Login successful", 200, token, "active"));
 
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ApiResponse(false, "Login failed: " + e.getMessage(), 500));
@@ -136,16 +146,6 @@ public class AuthController {
         }
 
         User user = optionalUser.get();
-
-        // ❌ OTP invalid
-//        if (!request.getOtp().equals(user.getOtpCode())) {
-//            return ResponseEntity.status(400).body(new ApiResponse(false, "Invalid OTP", 400));
-//        }
-//
-//        // ❌ OTP expired
-//        if (user.getOtpExpiresAt().isBefore(LocalDateTime.now())) {
-//            return ResponseEntity.status(400).body(new ApiResponse(false, "OTP expired", 400));
-//        }
 
         // 🔹 OTP verified
         user.setOtpVerified(true);

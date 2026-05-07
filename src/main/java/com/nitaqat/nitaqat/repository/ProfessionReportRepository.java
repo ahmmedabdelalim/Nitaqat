@@ -29,12 +29,9 @@ public class ProfessionReportRepository {
             condition += " AND p.user_id = "  + userId ;
         }
 
-
-
-        System.out.println(condition);
         String sql = """
             SELECT 
-                p.id AS profession_id,
+                MIN(p.id) AS profession_id,
                 a.name AS company_name,
                 p.company_code,
                 sp.saudization_catageory,
@@ -61,13 +58,12 @@ public class ProfessionReportRepository {
                 END AS actual_saudization_percentage
                       
             FROM professions p
-            JOIN saudization_percentage sp 
-                ON p.job = sp.job
+            LEFT JOIN saudization_percentage sp ON p.job = sp.job
             JOIN activities a 
                 ON p.activity_id = a.id
             %s
             GROUP BY
-                p.id,
+                
                 p.company_code,
                 a.name,
                 sp.saudization_catageory,

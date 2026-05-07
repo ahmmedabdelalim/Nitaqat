@@ -46,7 +46,7 @@ public class ActivitiesReportController {
 
         String token = header.substring(7);
         Long userId = jwtUtils.extractUserId(token);
-    /// ///////////
+
 
         List<ActivitiesReportDTO> report = activitiesReportRepository.getActivitiesReport(activityId , userId);
 
