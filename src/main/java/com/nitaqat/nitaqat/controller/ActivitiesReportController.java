@@ -2,17 +2,16 @@ package com.nitaqat.nitaqat.controller;
 
 
 import com.nitaqat.nitaqat.aspect.LogUserAction;
-import com.nitaqat.nitaqat.dto.ActivitiesAnalysisDTO;
-import com.nitaqat.nitaqat.dto.ActivitiesReportDTO;
-import com.nitaqat.nitaqat.dto.ProfessionReportDTO;
-import com.nitaqat.nitaqat.dto.ReportApiResponse;
+import com.nitaqat.nitaqat.dto.*;
 import com.nitaqat.nitaqat.repository.ActivitiesReportRepository;
 import com.nitaqat.nitaqat.security.JwtUtils;
+import com.nitaqat.nitaqat.service.ActivityBandSuggestionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.function.EntityResponse;
@@ -25,9 +24,11 @@ public class ActivitiesReportController {
     private final ActivitiesReportRepository activitiesReportRepository;
     @Autowired
     private JwtUtils jwtUtils;
+    private final ActivityBandSuggestionService activityBandSuggestionService;
 
-    public ActivitiesReportController(ActivitiesReportRepository activitiesReportRepository) {
+    public ActivitiesReportController(ActivitiesReportRepository activitiesReportRepository , ActivityBandSuggestionService activityBandSuggestionService  ) {
         this.activitiesReportRepository = activitiesReportRepository;
+        this.activityBandSuggestionService = activityBandSuggestionService;
     }
 
     @LogUserAction(action = "Activity Report")
@@ -67,6 +68,31 @@ public class ActivitiesReportController {
         ReportApiResponse<List<ActivitiesAnalysisDTO>> response =
                 new ReportApiResponse<>(true, "Activity Analysis fetched successfully", HttpStatus.OK.value(), report);
 
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PostMapping("/api/activities-report/suggestions")
+    public ResponseEntity<ReportApiResponse<List<ActivityWithSuggestionsDTO>>> getActivitiesReportWithSuggestions(
+            @RequestParam(required = false) Long activityId,
+            HttpServletRequest httpServletRequest
+    ) {
+        String header = httpServletRequest.getHeader("Authorization");
+        if (header == null || !header.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ReportApiResponse<>(false, "Missing or invalid token", 401, null));
+        }
+        String token = header.substring(7);
+        Long userId = jwtUtils.extractUserId(token);
+
+        List<ActivitiesReportDTO> report = activitiesReportRepository.getActivitiesReport(activityId, userId);
+
+        List<ActivityWithSuggestionsDTO> enriched = report.stream()
+                .map(activityBandSuggestionService::buildSuggestions)
+                .toList();
+
+        ReportApiResponse<List<ActivityWithSuggestionsDTO>> response =
+                new ReportApiResponse<>(true, "Activity report with suggestions fetched successfully", HttpStatus.OK.value(), enriched);
         return ResponseEntity.ok(response);
     }
 }

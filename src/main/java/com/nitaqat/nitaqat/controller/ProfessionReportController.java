@@ -3,6 +3,7 @@ package com.nitaqat.nitaqat.controller;
 import com.nitaqat.nitaqat.aspect.LogUserAction;
 import com.nitaqat.nitaqat.dto.ApiResponse;
 import com.nitaqat.nitaqat.dto.ProfessionReportDTO;
+import com.nitaqat.nitaqat.dto.ProfessionReportDTOWithGap;
 import com.nitaqat.nitaqat.dto.ReportApiResponse;
 import com.nitaqat.nitaqat.repository.ProfessionReportRepository;
 import com.nitaqat.nitaqat.security.JwtUtils;
@@ -30,7 +31,7 @@ public class ProfessionReportController {
 
     @LogUserAction(action = "Profession Report")
     @GetMapping("/api/profession-report")
-    public ResponseEntity<ReportApiResponse<List<ProfessionReportDTO>>> getProfessionReport(
+    public ResponseEntity<ReportApiResponse<List<ProfessionReportDTOWithGap>>> getProfessionReport(
             @RequestParam(required = false) Long activityId,
             HttpServletRequest httpServletRequest
     ) {
@@ -40,9 +41,9 @@ public class ProfessionReportController {
 
         String token = header.substring(7);
         Long userId = jwtUtils.extractUserId(token);
-        List<ProfessionReportDTO> report = reportRepository.getProfessionReport(activityId , userId);
+        List<ProfessionReportDTOWithGap> report = reportRepository.getProfessionReport(activityId , userId);
 
-        ReportApiResponse<List<ProfessionReportDTO>> response =
+        ReportApiResponse<List<ProfessionReportDTOWithGap>> response =
                 new ReportApiResponse<>(true, "Professions report fetched successfully", HttpStatus.OK.value(), report);
 
         return ResponseEntity.ok(response);

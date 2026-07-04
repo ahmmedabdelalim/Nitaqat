@@ -41,18 +41,18 @@ public class ActivitiesReportRepository {
                           WHEN p.nationality = 'سعودي وقف جنائي' THEN 2
                           WHEN p.nationality = 'سعودي موقوف جنائي' THEN 2
                           WHEN p.id IS NOT NULL THEN 1
-                       
+        
                           ELSE 0 END ) AS total_employees,
-                         
+        
                          SUM(CASE WHEN p.nationality = 'سعودي' THEN 1
                           WHEN p.nationality = 'سعودي معاق' THEN 4
                           WHEN p.nationality = 'سعودي إحتياجات خاصه' THEN 4
                           WHEN p.nationality = 'سعودي مسجون' THEN 2
                           WHEN p.nationality = 'سعودي وقف جنائي' THEN 2
                           WHEN p.nationality = 'سعودي موقوف جنائي' THEN 2
-                          
+        
                           ELSE 0 END) AS total_saudi_employees,
-                          
+        
                          ROUND(
                              (SUM(CASE WHEN p.nationality = 'سعودي' THEN 1
                               WHEN p.nationality = 'سعودي معاق' THEN 4
@@ -60,7 +60,7 @@ public class ActivitiesReportRepository {
                               WHEN p.nationality = 'سعودي مسجون' THEN 2
                               WHEN p.nationality = 'سعودي وقف جنائي' THEN 2
                               WHEN p.nationality = 'سعودي موقوف جنائي' THEN 2
-                              
+        
                               ELSE 0 END) * 100.0) / NULLIF(COUNT(p.id), 0),
                              2
                          ) AS actual_saudization_percentage,
@@ -71,7 +71,7 @@ public class ActivitiesReportRepository {
                      FROM activities a
                      LEFT JOIN professions p
                          ON p.activity_id = a.id
-                         
+        
                      %s
                      GROUP BY
                          a.id,
@@ -84,7 +84,7 @@ public class ActivitiesReportRepository {
                          a.platinum
                      ORDER BY
                          a.company_code;
-                
+        
         """.formatted(condition);
 
         return jdbcTemplate.query(sql,
