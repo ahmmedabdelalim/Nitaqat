@@ -68,6 +68,7 @@ public class ActivitiesReportRepository {
                          a.middel_green AS MiddelGreen,
                          a.high_green  AS HighGreen,
                          a.platinum  AS Platinum
+                         
                      FROM activities a
                      LEFT JOIN professions p
                          ON p.activity_id = a.id

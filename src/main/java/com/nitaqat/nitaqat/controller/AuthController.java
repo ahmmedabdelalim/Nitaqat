@@ -88,84 +88,82 @@ public class AuthController {
 
     @PostMapping("/api/auth/login")
     @LogUserAction(action = "Login OTP Request")
-    public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
+    public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest loginRequest,
+                                             BindingResult bindingResult,
+                                             HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldError().getDefaultMessage();
             return ResponseEntity.badRequest().body(new ApiResponse(false, errorMessage, 400));
         }
-
         try {
             Optional<User> optionalUser = userService.findByEmail(loginRequest.getEmail());
             if (optionalUser.isEmpty() || !passwordEncoder.matches(loginRequest.getPassword(), optionalUser.get().getPassword())) {
                 return ResponseEntity.status(400).body(new ApiResponse(false, "Invalid email or password", 400));
             }
-
             User user = optionalUser.get();
+
+            // 🔹 Let the AOP aspect know who this action belongs to (no authenticated
+            //     SecurityContext exists yet at this point in the login flow)
+            request.setAttribute("LOG_USER_ID", user.getId());
+            request.setAttribute("LOG_USERNAME", user.getEmail() != null ? user.getEmail() : user.getEmail());
 
             if (!user.isActive()) {
                 return ResponseEntity.status(400).body(new ApiResponse(false, "User not active", 400, null, "pending"));
             }
-
             // 🔹 Generate OTP (6 digits)
-//            String otp = String.valueOf((int) (Math.random() * 900000) + 100000);
-//            user.setOtpCode(otp);
-//            user.setOtpExpiresAt(LocalDateTime.now().plusMinutes(2));
-//            user.setOtpVerified(false);
-//            userService.save(user);  // update user with otp
+            String otp = String.valueOf((int) (Math.random() * 900000) + 100000);
+            user.setOtpCode(otp);
+            user.setOtpExpiresAt(LocalDateTime.now().plusMinutes(2));
+            user.setOtpVerified(false);
+            userService.save(user);  // update user with otp
 //            // 🔹 Send OTP via email
-//            emailService.sendOtpEmail(user.getEmail(), otp);
-//            return ResponseEntity.ok(new ApiResponse(true, "OTP sent to email", 200, null, "otp_sent"));
+            emailService.sendOtpEmail(user.getEmail(), otp);
+            return ResponseEntity.ok(new ApiResponse(true, "OTP sent to email", 200, null, "otp_sent"));
             // 🔹 Generate JWT
-            String token = jwtUtils.generateJwtToken(user.getEmail(), user.getId());
-            // 🔹 Create session in Redis
-            RedisSessionService.ActiveSession session = new RedisSessionService.ActiveSession();
-            session.setUserId(user.getId());
-            session.setUsername(user.getName());
-            session.setLoginAt(LocalDateTime.now());
-            session.setLastActivityAt(LocalDateTime.now());
-
-            String redisKey = "USER_SESSION_" + user.getId();
-            redisSessionService.saveSession(redisKey, session);
-
-            return ResponseEntity.ok(new ApiResponse(true, "Login successful", 200, token, "active"));
-
+//            String token = jwtUtils.generateJwtToken(user.getEmail(), user.getId());
+//            // 🔹 Create session in Redis
+//            RedisSessionService.ActiveSession session = new RedisSessionService.ActiveSession();
+//            session.setUserId(user.getId());
+//            session.setUsername(user.getName());
+//            session.setLoginAt(LocalDateTime.now());
+//            session.setLastActivityAt(LocalDateTime.now());
+//            String redisKey = "USER_SESSION_" + user.getId();
+//            redisSessionService.saveSession(redisKey, session);
+//            return ResponseEntity.ok(new ApiResponse(true, "Login successful", 200, token, "active"));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ApiResponse(false, "Login failed: " + e.getMessage(), 500));
         }
-
     }
-
 
     @LogUserAction(action = "Verify OTP")
     @PostMapping("/api/auth/verify-otp")
-    public ResponseEntity<ApiResponse> verifyOtp(@RequestBody VerifyOtpRequest request) {
-
+    public ResponseEntity<ApiResponse> verifyOtp(@RequestBody VerifyOtpRequest request,
+                                                 HttpServletRequest httpRequest) {
         Optional<User> optionalUser = userService.findByEmail(request.getEmail());
         if (optionalUser.isEmpty()) {
             return ResponseEntity.status(400).body(new ApiResponse(false, "User not found", 400));
         }
-
         User user = optionalUser.get();
+
+        // 🔹 Let the AOP aspect know who this action belongs to
+        httpRequest.setAttribute("LOG_USER_ID", user.getId());
+        httpRequest.setAttribute("LOG_USERNAME", user.getEmail() != null ? user.getEmail() : user.getEmail());
 
         // 🔹 OTP verified
         user.setOtpVerified(true);
         user.setOtpCode(null);
         user.setOtpExpiresAt(null);
         userService.save(user);
-
         // 🔹 Generate JWT
         String token = jwtUtils.generateJwtToken(user.getEmail(), user.getId());
-
         // 🔹 Create session in Redis
         RedisSessionService.ActiveSession session = new RedisSessionService.ActiveSession();
         session.setUserId(user.getId());
         session.setUsername(user.getName());
         session.setLoginAt(LocalDateTime.now());
         session.setLastActivityAt(LocalDateTime.now());
-
         String redisKey = "USER_SESSION_" + user.getId();
         redisSessionService.saveSession(redisKey, session);
-
         return ResponseEntity.ok(new ApiResponse(true, "OTP Verified and Login successful", 200, token, "active"));
     }
 
