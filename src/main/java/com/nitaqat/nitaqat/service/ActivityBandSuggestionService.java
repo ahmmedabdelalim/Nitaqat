@@ -64,7 +64,8 @@ public class ActivityBandSuggestionService {
                 ));
             } else {
                 // Band BELOW current -> hire foreigners
-                double upperBoundToBreak = currentBand.requiredPct();
+//                double upperBoundToBreak = currentBand.requiredPct();
+                double upperBoundToBreak = bands.get(i - 1).requiredPct(); // threshold of the band directly above THIS target
                 double lowerBoundOfTarget = band.requiredPct();
 
                 Integer minForeigners = foreignersNeededToDropBelow(S, T, upperBoundToBreak);
